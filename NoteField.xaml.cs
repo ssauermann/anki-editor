@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using AnkiEditor.Scripts;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace AnkiEditor
@@ -141,12 +143,6 @@ namespace AnkiEditor
                 InputLanguageManager.SetInputLanguage(TxtBox, CultureInfo.CreateSpecificCulture(selectedLanguage));
         }
 
-        public event TextChangedEventHandler OnTextChanged;
-        private void TxtBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            OnTextChanged?.Invoke(sender, e);
-        }
-
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CurrentScript?.Stop();
@@ -168,19 +164,15 @@ namespace AnkiEditor
             CurrentScript?.Start();
         }
 
-        public event RoutedEventHandler TextGotFocus;
-
-        private void TxtBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            TextGotFocus?.Invoke(sender, e);
-        }
-
-        public event RoutedEventHandler TextLostFocus;
+        protected event EventHandler TextLostFocus;
 
         private void TxtBox_LostFocus(object sender, RoutedEventArgs e)
         {
             TextLostFocus?.Invoke(sender, e);
         }
+
+        public void TextLostFocusAdd(EventHandler func) => TextLostFocus += func;
+        public void TextLostFocusRemove(EventHandler func) => TextLostFocus -= func;
 
     }
 }

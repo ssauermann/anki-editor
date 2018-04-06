@@ -1,40 +1,27 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
 using HtmlAgilityPack;
 using RestSharp;
 
-namespace AnkiEditor
+namespace AnkiEditor.Scripts
 {
-    class FuriganaScript : Script
+    class FuriganaScript : Script2
     {
 
-        public FuriganaScript(NoteField field, NoteField src) : base(field)
+        public FuriganaScript(NoteField self, NoteField other) : base(self, other)
         {
-            this.Src = src;
         }
 
-        public NoteField Src { get; set; }
-
-        public override void Start()
+        public override async void Execute(object sender, EventArgs args)
         {
-            Src.TextLostFocus += OnLostFocus;
+            if (Other.FieldText == string.Empty || Self.FieldText != string.Empty) return;
+            Self.FieldText = await NihongoderaQuery(Other.FieldText);
         }
 
-        private void OnLostFocus(object sender, RoutedEventArgs args)
-        {
-            if (Src.FieldText == string.Empty || Self.FieldText != string.Empty) return;
-            Self.FieldText = NihongoderaQuery(Src.FieldText);
-        }
-
-        public override void Stop()
-        {
-            Src.TextLostFocus -= OnLostFocus;
-        }
-
-
-
-        private string NihongoderaQuery(string kana)
+        private async Task<string> NihongoderaQuery(string kana)
         {
             var text = HttpUtility.UrlEncode(kana);
 
@@ -44,7 +31,7 @@ namespace AnkiEditor
             request.AddHeader("Cache-Control", "no-cache");
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("undefined", "options%5Bfurigana%5D%5Bkana%5D=hiragana&type=furigana&text=" + text, ParameterType.RequestBody);
-            IRestResponse response = client.Execute(request); //TODO Async
+            IRestResponse response = await client.ExecuteTaskAsync(request);
 
             if (response.StatusCode != HttpStatusCode.OK)
                 return kana;
@@ -59,5 +46,6 @@ namespace AnkiEditor
                 .Replace("</rp>", "").Replace("<rt>", "").Replace("</rt>", "").Replace("<rb>", "").Replace("</rb>", "").Replace("</ruby>", "");
             return furigana.Trim();
         }
+
     }
 }

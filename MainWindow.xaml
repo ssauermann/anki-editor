@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AnkiEditor"
         xmlns:ankiEditor="clr-namespace:AnkiEditor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="AnkiEditor" Height="350" Width="525">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="337*"/>

@@ -19,7 +19,7 @@
         </UniformGrid>
         <StackPanel>
             <TextBlock Text="{Binding FieldName, ElementName=Self}"/>
-            <TextBox x:Name="TxtBox" Text="{Binding FieldText, ElementName=Self, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  TextChanged="TxtBox_TextChanged" GotFocus="TxtBox_GotFocus" LostFocus="TxtBox_LostFocus" />
+            <TextBox x:Name="TxtBox" Text="{Binding FieldText, ElementName=Self, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TxtBox_LostFocus" />
         </StackPanel>
     </DockPanel>
 </UserControl>

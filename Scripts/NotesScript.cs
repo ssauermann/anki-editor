@@ -1,39 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using HtmlAgilityPack;
 
-namespace AnkiEditor
+namespace AnkiEditor.Scripts
 {
-    class NotesScript : Script
+    class NotesScript : Script2
     {
 
-        public NotesScript(NoteField field, NoteField src) : base(field)
+        public NotesScript(NoteField self, NoteField other) : base(self, other)
         {
-            this.Src = src;
         }
 
-        public NoteField Src { get; set; }
-
-        public override void Start()
+        public override async void Execute(object sender, EventArgs args)
         {
-            Src.TextLostFocus += OnLostFocus;
-        }
-
-        private void OnLostFocus(object sender, RoutedEventArgs args)
-        {
-            if (Src.FieldText == string.Empty || Self.FieldText != string.Empty) return;
-            var dic = NihongoderaQuery(Src.FieldText);
-            Self.FieldText = dic == Src.FieldText ? "" : dic;
-        }
-
-        public override void Stop()
-        {
-            Self.TextLostFocus -= OnLostFocus;
+            if (Other.FieldText == string.Empty || Self.FieldText != string.Empty) return;
+            var dic = await NihongoderaQuery(Other.FieldText);
+            Self.FieldText = dic == Other.FieldText ? "" : dic;
         }
 
 
-
-        private string NihongoderaQuery(string kana)
+        private async Task<string> NihongoderaQuery(string kana)
         {
             var url = "https://nihongodera.com/search?input=" + kana;
             var web = new HtmlWeb();
@@ -87,5 +75,6 @@ namespace AnkiEditor
             return "";
 
         }
+
     }
 }

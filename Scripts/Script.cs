@@ -1,19 +1,16 @@
-﻿namespace AnkiEditor
+﻿namespace AnkiEditor.Scripts
 {
     public abstract class Script
     {
-        public string Name = "<None>";
         protected readonly NoteField Self;
 
-        protected Script(NoteField field)
+        protected Script(NoteField self)
         {
-            Self = field;
+            Self = self;
         }
 
         public abstract void Start();
 
         public abstract void Stop();
-
-        public override string ToString() => Name;
     }
 }
