@@ -1,9 +1,9 @@
-﻿<Application x:Class="AnkiImport.App"
+﻿<Application x:Class="AnkiEditor.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:AnkiImport"
+             xmlns:local="clr-namespace:AnkiEditor"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>

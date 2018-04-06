@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AnkiImport.Properties
+namespace AnkiEditor.Properties
 {
 
 
