@@ -22,7 +22,7 @@ namespace AnkiEditor
         {
             InitializeComponent();
             FieldMirrorItems = new List<NoteField>();
-            FieldScriptItems = new List<string>();
+            FieldScriptItems = new List<EScripts>();
             FieldLanguageItems = new List<string>();
             FieldText = string.Empty;
         }
@@ -87,11 +87,11 @@ namespace AnkiEditor
         }
 
         public static readonly DependencyProperty FieldScriptItemsProperty =
-            DependencyProperty.Register(nameof(FieldScriptItems), typeof(IList<string>), typeof(NoteField), new PropertyMetadata(new List<string>()));
+            DependencyProperty.Register(nameof(FieldScriptItems), typeof(IList<EScripts>), typeof(NoteField), new PropertyMetadata(new List<EScripts>()));
 
-        public IList<string> FieldScriptItems
+        public IList<EScripts> FieldScriptItems
         {
-            get => (IList<string>)GetValue(FieldScriptItemsProperty);
+            get => (IList<EScripts>)GetValue(FieldScriptItemsProperty);
             set => SetValue(FieldScriptItemsProperty, value);
         }
 
@@ -149,18 +149,27 @@ namespace AnkiEditor
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            UpdateScript();
+        }
+
+        private void UpdateScript()
+        {
             CurrentScript?.Stop();
-            var selectedScript = (string)CmbScript.SelectedItem;
+
+            if (FieldScriptIndex < 0 || FieldScriptIndex >= FieldScriptItems.Count || FieldMirrorIndex < 0 || FieldMirrorIndex >= FieldMirrorItems.Count)
+                return;
+
+            var selectedScript = FieldScriptItems[FieldScriptIndex];
 
             switch (selectedScript)
             {
-                case "Furigana":
+                case EScripts.Furigana:
                     CurrentScript = new FuriganaScript(this, FieldMirrorItems[FieldMirrorIndex], _query);
                     break;
-                case "DictionaryForm":
+                case EScripts.DictionaryForm:
                     CurrentScript = new DictionaryFormScript(this, FieldMirrorItems[FieldMirrorIndex], _query);
                     break;
-                case "Notes":
+                case EScripts.Notes:
                     CurrentScript = new NotesScript(this, FieldMirrorItems[FieldMirrorIndex], _query);
                     break;
             }
@@ -178,5 +187,9 @@ namespace AnkiEditor
         public void TextLostFocusAdd(EventHandler func) => TextLostFocus += func;
         public void TextLostFocusRemove(EventHandler func) => TextLostFocus -= func;
 
+        private void CmbMirror_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateScript();
+        }
     }
 }

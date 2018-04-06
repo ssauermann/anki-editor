@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using AnkiEditor.Scripts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
@@ -18,7 +21,6 @@ namespace AnkiEditor
         private NoteModel noteModel;
         private readonly List<NoteField> fields = new List<NoteField>();
         private dynamic json;
-        public static readonly List<string> Scripts = new List<string>() { "<None>", "Furigana", "DictionaryForm", "Notes" };
 
         public MainWindow()
         {
@@ -91,7 +93,7 @@ namespace AnkiEditor
                 field.FieldLanguageItems = languageList;
                 field.FieldLanguageIndex = languageList.FindIndex(x => x == currentLang);
 
-                field.FieldScriptItems = Scripts;
+                field.FieldScriptItems = new List<EScripts>(Enum.GetValues(typeof(EScripts)).Cast<EScripts>());
                 field.FieldScriptIndex = 0;
 
             }

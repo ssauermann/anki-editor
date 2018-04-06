@@ -7,21 +7,37 @@
              xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="AnkiEditor.NoteField"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" x:Name="Self">
-    <DockPanel LastChildFill="True">
-        <UniformGrid  DockPanel.Dock="Left" Rows="2" Columns="2">
-            <ComboBox SelectedIndex="{Binding FieldKeep, ElementName=Self, Mode=TwoWay}" KeyboardNavigation.IsTabStop="False">
-                <System:String>No</System:String>
-                <System:String>Yes</System:String>
-            </ComboBox>
-            <ComboBox SelectedIndex="{Binding FieldMirrorIndex, ElementName=Self, Mode=TwoWay}" DisplayMemberPath="FieldName" ItemsSource="{Binding FieldMirrorItems, ElementName=Self}" KeyboardNavigation.IsTabStop="False"/>
-            <ComboBox x:Name="CmbLanguage" SelectedIndex="{Binding FieldLanguageIndex, ElementName=Self, Mode=TwoWay}" ItemsSource="{Binding FieldLanguageItems, ElementName=Self}" SelectionChanged="CmbLanguage_SelectionChanged" KeyboardNavigation.IsTabStop="False"/>
-            <ComboBox x:Name="CmbScript" SelectedIndex="{Binding FieldScriptIndex, ElementName=Self, Mode=TwoWay}" ItemsSource="{Binding FieldScriptItems, ElementName=Self}" KeyboardNavigation.IsTabStop="False" SelectionChanged="ComboBox_SelectionChanged"/>
-        </UniformGrid>
-        <StackPanel>
-            <TextBlock Text="{Binding FieldName, ElementName=Self}"/>
-            <TextBox x:Name="TxtBox" Text="{Binding FieldText, ElementName=Self, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TxtBox_LostFocus" />
-        </StackPanel>
-    </DockPanel>
+    <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Padding="2">
+        <DockPanel LastChildFill="True">
+            <UniformGrid  DockPanel.Dock="Left" Rows="2" Columns="2" Width="300" Margin="5,0,10,0">
+                <DockPanel LastChildFill="True" VerticalAlignment="Center">
+                    <Label DockPanel.Dock="Left" Width="50">Keep:</Label>
+                    <ComboBox SelectedIndex="{Binding FieldKeep, ElementName=Self, Mode=TwoWay}" KeyboardNavigation.IsTabStop="False" VerticalAlignment="Center">
+                        <System:String>No</System:String>
+                        <System:String>Yes</System:String>
+                    </ComboBox>
+                </DockPanel>
+                <DockPanel LastChildFill="True" VerticalAlignment="Center">
+                    <Label DockPanel.Dock="Left" Width="50">Source:</Label>
+                    <ComboBox x:Name="CmbMirror" SelectedIndex="{Binding FieldMirrorIndex, ElementName=Self, Mode=TwoWay}"  DisplayMemberPath="FieldName" VerticalAlignment="Center" ItemsSource="{Binding FieldMirrorItems, ElementName=Self}" KeyboardNavigation.IsTabStop="False" SelectionChanged="CmbMirror_SelectionChanged"/>
+                </DockPanel>
+                <DockPanel LastChildFill="True" VerticalAlignment="Center">
+                    <Label DockPanel.Dock="Left" Content="Lang:" Width="50"/>
+                    <ComboBox x:Name="CmbLanguage" VerticalAlignment="Center" SelectedIndex="{Binding FieldLanguageIndex, ElementName=Self, Mode=TwoWay}" ItemsSource="{Binding FieldLanguageItems, ElementName=Self}" SelectionChanged="CmbLanguage_SelectionChanged" KeyboardNavigation.IsTabStop="False"/>
+                </DockPanel>
+                <DockPanel LastChildFill="True" VerticalAlignment="Center">
+                    <Label DockPanel.Dock="Left" Width="50">Script:</Label>
+                    <ComboBox x:Name="CmbScript" VerticalAlignment="Center" SelectedIndex="{Binding FieldScriptIndex, ElementName=Self, Mode=TwoWay}" ItemsSource="{Binding FieldScriptItems, ElementName=Self}" KeyboardNavigation.IsTabStop="False" SelectionChanged="ComboBox_SelectionChanged"/>
+                </DockPanel>
+            </UniformGrid>
+            <Border BorderBrush="LightGray" BorderThickness="1,0,0,0">
+                <StackPanel Margin="10,0,5,0">
+                    <TextBlock Text="{Binding FieldName, ElementName=Self}"/>
+                    <TextBox x:Name="TxtBox" Text="{Binding FieldText, ElementName=Self, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TxtBox_LostFocus" />
+                </StackPanel>
+            </Border>
+        </DockPanel>
+    </Border>
 </UserControl>
 
 
