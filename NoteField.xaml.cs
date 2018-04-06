@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using AnkiEditor.Query;
 using AnkiEditor.Scripts;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -14,6 +15,9 @@ namespace AnkiEditor
     /// </summary>
     public partial class NoteField : UserControl
     {
+
+        private IQuery _query = new Nihongodera();
+
         public NoteField()
         {
             InitializeComponent();
@@ -151,13 +155,13 @@ namespace AnkiEditor
             switch (selectedScript)
             {
                 case "Furigana":
-                    CurrentScript = new FuriganaScript(this, FieldMirrorItems[FieldMirrorIndex]);
+                    CurrentScript = new FuriganaScript(this, FieldMirrorItems[FieldMirrorIndex], _query);
                     break;
                 case "DictionaryForm":
-                    CurrentScript = new DictionaryFormScript(this, FieldMirrorItems[FieldMirrorIndex]);
+                    CurrentScript = new DictionaryFormScript(this, FieldMirrorItems[FieldMirrorIndex], _query);
                     break;
                 case "Notes":
-                    CurrentScript = new NotesScript(this, FieldMirrorItems[FieldMirrorIndex]);
+                    CurrentScript = new NotesScript(this, FieldMirrorItems[FieldMirrorIndex], _query);
                     break;
             }
 

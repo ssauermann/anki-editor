@@ -68,7 +68,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Query\Nihongodera.cs" />
     <Compile Include="Scripts\EScripts.cs" />
+    <Compile Include="Query\IQuery.cs" />
     <Compile Include="Scripts\NotesScript.cs" />
     <Compile Include="Scripts\DictionaryFormScript.cs" />
     <Compile Include="Scripts\FuriganaScript.cs" />

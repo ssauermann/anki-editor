@@ -1,34 +1,23 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Windows;
-using HtmlAgilityPack;
+using AnkiEditor.Query;
 
 namespace AnkiEditor.Scripts
 {
     class DictionaryFormScript : Script2
     {
+        private readonly IQuery _query;
 
-        public DictionaryFormScript(NoteField self, NoteField other) : base(self, other)
+        public DictionaryFormScript(NoteField self, NoteField other, IQuery query) : base(self, other)
         {
+            _query = query;
         }
 
         public override async void Execute(object sender, EventArgs args)
         {
             if (Other.FieldText == string.Empty || Self.FieldText != string.Empty) return;
-            var dic = await NihongoderaQuery(Other.FieldText);
+            var dic = await _query.DictionaryForm(Other.FieldText);
             Self.FieldText = dic == Other.FieldText ? "" : dic;
         }
 
-
-        private async Task<string> NihongoderaQuery(string kana)
-        {
-            var url = "https://nihongodera.com/search?input=" + kana;
-            var web = new HtmlWeb();
-            var doc = web.Load(url);
-
-            var dictionary = doc.DocumentNode.SelectSingleNode("//*[contains(concat(\" \", normalize-space(@class), \" \"), \" result-tile__entry \")]");
-            dictionary = dictionary?.SelectSingleNode("./span");
-            return dictionary?.InnerHtml.Trim() ?? "";
-        }
     }
 }
