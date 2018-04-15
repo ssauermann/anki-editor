@@ -10,11 +10,11 @@
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
             <Separator />
-            <ToggleButton Command="EditingCommands.ToggleBold">
+            <ToggleButton Command="EditingCommands.ToggleBold" IsChecked="{Binding Path=SelectionIsBold, Mode=TwoWay}">
                 Bold
                 <!--<Image Source="/WpfTutorialSamples;component/Images/text_bold.png" Width="16" Height="16" />-->
             </ToggleButton>
-            <ToggleButton Command="EditingCommands.ToggleItalic">
+            <ToggleButton Command="EditingCommands.ToggleItalic" IsChecked="{Binding Path=SelectionIsBold, Mode=TwoWay}">
                 Italic
                 <!--<Image Source="/WpfTutorialSamples;component/Images/text_italic.png" Width="16" Height="16" />-->
             </ToggleButton>

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Threading;
 using Caliburn.Micro;
 using HtmlAgilityPack;
 using MarkupConverter;
@@ -56,6 +58,69 @@ namespace AnkiEditor.ViewModels
         {
             RawText = RtbToHtml(sender);
         }
+
+#region Selection changed handling
+        // https://stackoverflow.com/a/3474100
+        bool _queuedChange;
+        private bool _selectionIsBold;
+        private bool _selectionIsItalic;
+
+        private void SelectionChanged(RichTextBox sender)
+        {
+            if (!_queuedChange)
+            {
+                _queuedChange = true;
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, (System.Action)(() =>
+                {
+                    _queuedChange = false;
+                    HandleSelectionChange(sender);
+                }));
+            }
+        }
+
+        private void HandleSelectionChange(RichTextBox sender)
+        {
+            TextSelection selection = sender.Selection;
+
+            //TODO Underline,
+            //var family = selection.GetPropertyValue(TextElement.FontFamilyProperty);
+            var weight = selection.GetPropertyValue(TextElement.FontWeightProperty);
+            var style = selection.GetPropertyValue(TextElement.FontStyleProperty);
+            //var align = selection.GetPropertyValue(Block.TextAlignmentProperty);
+
+            var unset = DependencyProperty.UnsetValue;
+
+            //SelectionFontFamily = family != unset ? (FontFamily)family : null;
+            SelectionIsBold = weight != unset && (FontWeight)weight == FontWeights.Bold;
+            SelectionIsItalic = style != unset && (FontStyle)style == FontStyles.Italic;
+
+            /*SelectionIsLeftAligned = align != unset && (TextAlignment)align == TextAlignment.Left;
+            SelectionIsCenterAligned = align != unset && (TextAlignment)align == TextAlignment.Center;
+            SelectionIsRightAligned = align != unset && (TextAlignment)align == TextAlignment.Right;
+            SelectionIsJustified = align != unset && (TextAlignment)align == TextAlignment.Justify;*/
+        }
+
+        public bool SelectionIsItalic
+        {
+            get => _selectionIsItalic;
+            set
+            {
+                _selectionIsItalic = value;
+                NotifyOfPropertyChange(() => SelectionIsItalic);
+            }
+        }
+
+        public bool SelectionIsBold
+        {
+            get => _selectionIsBold;
+            set
+            {
+                _selectionIsBold = value;
+                NotifyOfPropertyChange(() => SelectionIsBold);
+            }
+        }
+
+        #endregion
 
         private static string RtbToHtml(RichTextBox rtb)
         {
