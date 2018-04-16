@@ -22,6 +22,7 @@
                     </Button>
                 </ToolBar>
                 <ToolBar Visibility="{Binding CurrentDeck, TargetNullValue=Hidden}">
+                    <ComboBox x:Name="CurrentDeck_NoteModels" DisplayMemberPath="name" SelectedItem="CurrentDeck_SelectedNoteModel"/>
                     <Button cal:Message.Attach="AddNote" cal:Action.Target="{Binding CurrentDeck}" KeyboardNavigation.IsTabStop="False" ToolTip="Add a new note.">
                         <AccessText>_Add Note</AccessText>
                     </Button>
@@ -45,6 +46,14 @@
         </DockPanel>
     </Grid>
 </Window>
+
+
+
+
+
+
+
+
 
 
 

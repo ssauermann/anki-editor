@@ -24,7 +24,10 @@ namespace AnkiEditor.ViewModels
             foreach (var noteModel in deckModel.note_models)
             {
                 _noteModels.Add(noteModel.crowdanki_uuid, noteModel);
+                NoteModels.Add(noteModel);
             }
+
+            SelectedNoteModel = NoteModels.First();
             
             foreach (var note in deckModel.notes)
             {
@@ -42,25 +45,26 @@ namespace AnkiEditor.ViewModels
         public int NoteCount => NoteViewModels.Count;
 
 
-        public bool CanAddNote => true;
+        public bool CanAddNote => SelectedNoteModel != null;
 
         public void AddNote()
         {
-            //TODO
-            throw new NotImplementedException();
+            var newNote = new NoteViewModel(SelectedNoteModel);
+            NoteViewModels.Add(newNote);
+            SelectedNoteViewModel = newNote;
         }
 
         public bool CanDeleteNote => SelectedNoteViewModel != null;
 
         public void DeleteNote()
         {
-            //TODO
-            throw new NotImplementedException();
+            NoteViewModels.Remove(SelectedNoteViewModel);
         }
 
 
         public ObservableCollection<NoteViewModel> NoteViewModels { get; } = new ObservableCollection<NoteViewModel>();
         private NoteViewModel _selectedNoteViewModel;
+        private Models.NoteModel _selectedNoteModel;
 
         public NoteViewModel SelectedNoteViewModel
         {
@@ -71,6 +75,18 @@ namespace AnkiEditor.ViewModels
                 NotifyOfPropertyChange(() => SelectedNoteViewModel);
                 NotifyOfPropertyChange(() => CanDeleteNote);
 
+            }
+        }
+
+        public ObservableCollection<Models.NoteModel> NoteModels { get; } = new ObservableCollection<Models.NoteModel>();
+
+        public Models.NoteModel SelectedNoteModel
+        {
+            get => _selectedNoteModel;
+            set
+            {
+                _selectedNoteModel = value;
+                NotifyOfPropertyChange(() => SelectedNoteModel);
             }
         }
     }

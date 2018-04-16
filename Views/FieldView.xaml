@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:AnkiEditor.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Margin="10,0,5,0">
+    <StackPanel Margin="10,0,5,0" >
         <TextBlock x:Name="Name"/>
-        <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
     </StackPanel>
 </UserControl>
