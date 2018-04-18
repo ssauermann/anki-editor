@@ -17,7 +17,7 @@ namespace AnkiEditor.ViewModels
 {
     public class EditorViewModel : PropertyChangedBase
     {
-        private string _rawText = "FI";
+        private string _rawText = "";
 
         public string RawText
         {

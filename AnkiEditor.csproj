@@ -84,7 +84,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="PropertyExtensions\BrowserBehavior.cs" />
     <Compile Include="Models\CrowdAnkiJson.cs" />
+    <Compile Include="PropertyExtensions\ItemsControlExtensions.cs" />
     <Compile Include="Query\Nihongodera.cs" />
     <Compile Include="Scripts\EScripts.cs" />
     <Compile Include="Query\IQuery.cs" />
@@ -99,9 +101,11 @@
     <Compile Include="Utils.cs" />
     <Compile Include="ViewModels\DeckViewModel.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />
+    <Compile Include="Models\FieldSettings.cs" />
     <Compile Include="ViewModels\FieldViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NoteViewModel.cs" />
+    <Compile Include="ViewModels\PreviewViewModel.cs" />
     <Compile Include="Views\DeckView.xaml.cs">
       <DependentUpon>DeckView.xaml</DependentUpon>
     </Compile>

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AnkiEditor.PropertyExtensions;
 
 namespace AnkiEditor.Views
 {
@@ -23,6 +24,13 @@ namespace AnkiEditor.Views
         public DeckView()
         {
             InitializeComponent();
+        }
+
+        private void NoteViewModels_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (NoteViewModels.Tag as bool? != true) return;
+            NoteViewModels.ScrollToCenterOfView(NoteViewModels.SelectedItem);
+            NoteViewModels.Tag = false;
         }
     }
 }

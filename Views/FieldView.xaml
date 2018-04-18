@@ -4,10 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AnkiEditor.Views"
+             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Margin="10,0,5,0" >
-        <TextBlock x:Name="Name"/>
-        <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-    </StackPanel>
+    <DockPanel>
+        <TextBlock x:Name="Name" DockPanel.Dock="Top"/>
+        <!--<TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
+        <RichTextBox x:Name="Rtb" cal:Message.Attach="[Event TextChanged] = [Action TextChanged($source)]" UndoLimit="50">
+            <FlowDocument PageWidth="{Binding ActualWidth, ElementName=Rtb, Mode=OneWay}"></FlowDocument>
+        </RichTextBox>
+    </DockPanel>
 </UserControl>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using AnkiEditor.Models;
 using Caliburn.Micro;
 
@@ -34,7 +35,24 @@ namespace AnkiEditor.ViewModels
                 // Add notes where notemodel exists
                 if (_noteModels.TryGetValue(note.note_model_uuid, out var noteModel))
                 {
-                    NoteViewModels.Add(new NoteViewModel(note, noteModel));
+                    NoteViewModels.Add(new NoteViewModel(note, noteModel, this));
+                }
+            }
+
+            foreach (var lang in InputLanguageManager.Current.AvailableInputLanguages ?? new List<object>())
+            {
+                Languages.Add(lang.ToString());
+            }
+
+            var defaultLang = InputLanguageManager.Current.CurrentInputLanguage.Name;
+
+            foreach (var noteModel in deckModel.note_models)
+            {
+                var prefix = noteModel.crowdanki_uuid;
+
+                foreach (var fld in noteModel.flds)
+                {
+                    FieldSettings.Add($"{prefix}_{fld.name}", new FieldSettings(){Language = defaultLang});
                 }
             }
         }
@@ -49,9 +67,20 @@ namespace AnkiEditor.ViewModels
 
         public void AddNote()
         {
-            var newNote = new NoteViewModel(SelectedNoteModel);
+            var newNote = new NoteViewModel(SelectedNoteModel, this);
             NoteViewModels.Add(newNote);
+            ScrollToSelected = true;
             SelectedNoteViewModel = newNote;
+        }
+
+        public bool ScrollToSelected
+        {
+            get => _scrollToSelected;
+            set
+            {
+                _scrollToSelected = value;
+                NotifyOfPropertyChange(() => ScrollToSelected);
+            }
         }
 
         public bool CanDeleteNote => SelectedNoteViewModel != null;
@@ -65,6 +94,7 @@ namespace AnkiEditor.ViewModels
         public ObservableCollection<NoteViewModel> NoteViewModels { get; } = new ObservableCollection<NoteViewModel>();
         private NoteViewModel _selectedNoteViewModel;
         private Models.NoteModel _selectedNoteModel;
+        private bool _scrollToSelected;
 
         public NoteViewModel SelectedNoteViewModel
         {
@@ -74,6 +104,7 @@ namespace AnkiEditor.ViewModels
                 _selectedNoteViewModel = value;
                 NotifyOfPropertyChange(() => SelectedNoteViewModel);
                 NotifyOfPropertyChange(() => CanDeleteNote);
+                NotifyOfPropertyChange(() => SettingsForField);
 
             }
         }
@@ -89,5 +120,29 @@ namespace AnkiEditor.ViewModels
                 NotifyOfPropertyChange(() => SelectedNoteModel);
             }
         }
+
+        #region FieldSettings
+
+
+        public ObservableCollection<string> Languages { get; } = new ObservableCollection<string>();
+
+        public Dictionary<string, FieldSettings> FieldSettings = new Dictionary<string, FieldSettings>();
+        private string _selectedField;
+
+        public string SelectedField
+        {
+            get => _selectedField;
+            set
+            {
+                _selectedField = value;
+                NotifyOfPropertyChange(() => SelectedField);
+                NotifyOfPropertyChange(() => SettingsForField);
+            }
+        }
+
+        public FieldSettings SettingsForField => FieldSettings.GetValueOrDefault($"{SelectedNoteViewModel.Uuid}_{SelectedField}");
+
+        #endregion
+
     }
 }

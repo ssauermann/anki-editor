@@ -14,13 +14,15 @@ namespace AnkiEditor.ViewModels
     {
         private readonly Note _note;
         private readonly Models.NoteModel _noteModel;
+        public DeckViewModel Deck { get; }
         private FieldViewModel _selectedField;
 
         /// <summary>
         /// Create a new note
         /// </summary>
         /// <param name="noteModel"></param>
-        public NoteViewModel(Models.NoteModel noteModel)
+        /// <param name="deck"></param>
+        public NoteViewModel(Models.NoteModel noteModel, DeckViewModel deck)
         {
             _note = new Note()
             {
@@ -33,6 +35,7 @@ namespace AnkiEditor.ViewModels
                 tags = new List<string>()
             };
             _noteModel = noteModel;
+            Deck = deck;
 
             Initialize();
         }
@@ -42,17 +45,19 @@ namespace AnkiEditor.ViewModels
         /// </summary>
         /// <param name="note"></param>
         /// <param name="noteModel"></param>
-        public NoteViewModel(Models.Note note, Models.NoteModel noteModel)
+        /// <param name="deck"></param>
+        public NoteViewModel(Models.Note note, Models.NoteModel noteModel, DeckViewModel deck)
         {
             _note = note;
             _noteModel = noteModel;
-
+            Deck = deck;
             Initialize();
         }
 
         private void Initialize()
         {
 
+            Uuid = _noteModel.crowdanki_uuid;
             _note.tags.ForEach(Tags.Add);
 
             foreach (var fieldViewModel in _noteModel.flds.Zip(_note.fields,
@@ -88,7 +93,10 @@ namespace AnkiEditor.ViewModels
             {
                 _selectedField = value;
                 NotifyOfPropertyChange(() => SelectedField);
+                Deck.SelectedField = value?.Name;
             }
         }
+
+        public string Uuid { get; private set; }
     }
 }

@@ -6,8 +6,55 @@
              xmlns:local="clr-namespace:AnkiEditor.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <ListView x:Name="Fields" />
-    </Grid>
+    <DockPanel>
+        <!--TODO Preview 
+        <WebBrowser DockPanel.Dock="Right" Width="400"  previewEngine:BrowserBehavior.Html="{Binding PreviewHtml}"/>
+        -->
+        <ToolBarTray Orientation="Vertical" DockPanel.Dock="Right">
+            <ToolBar>
+                <ToggleButton Command="EditingCommands.ToggleBold" IsChecked="{Binding Path=SelectionIsBold, Mode=TwoWay}">
+                    Bold
+                    <!--<Image Source="/WpfTutorialSamples;component/Images/text_bold.png" Width="16" Height="16" />-->
+                </ToggleButton>
+                <ToggleButton Command="EditingCommands.ToggleItalic" IsChecked="{Binding Path=SelectionIsBold, Mode=TwoWay}">
+                    Italic
+                    <!--<Image Source="/WpfTutorialSamples;component/Images/text_italic.png" Width="16" Height="16" />-->
+                </ToggleButton>
+                <ToggleButton Command="EditingCommands.ToggleUnderline">
+                    Underline
+                    <!--<Image Source="/WpfTutorialSamples;component/Images/text_underline.png" Width="16" Height="16" />-->
+                </ToggleButton>
+                <Separator />
+                <ComboBox x:Name="Deck_Languages" SelectedItem="{Binding Deck.SettingsForField.Language}" Visibility="{Binding Deck.SettingsForField, TargetNullValue=Hidden}"/>
+            </ToolBar>
+        </ToolBarTray>
+        <DockPanel>
+            <ListView DockPanel.Dock="Bottom" x:Name="Tags">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+            <ListView x:Name="Fields">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel></StackPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </DockPanel>
+    </DockPanel>
 </UserControl>
+
+
+
+
+
+
 
