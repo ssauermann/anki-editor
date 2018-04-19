@@ -11,9 +11,11 @@ namespace AnkiEditor.ViewModels
 {
     public class FieldViewModel: PropertyChangedBase
     {
+        private readonly NoteViewModel _note;
 
-        public FieldViewModel(string name)
+        public FieldViewModel(string name, NoteViewModel note)
         {
+            _note = note;
             Name = name;
         }
 
@@ -45,6 +47,20 @@ namespace AnkiEditor.ViewModels
         public void TextChanged(RichTextBox sender)
         {
 
+        }
+
+        public async void ExecuteScript()
+        {
+            var settings = _note.Deck.FieldSettings[$"{_note.Uuid}_{Name}"];
+
+            if (settings.ScriptSrc == null) return;
+
+            if (settings.ScriptOverwrite || string.IsNullOrWhiteSpace(Value))
+            {
+                var result = await settings.Script.Execute(settings.ScriptSrc.Value);
+                if(result!=null)
+                    Value = result;
+            }
         }
     }
 }

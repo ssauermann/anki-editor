@@ -88,16 +88,13 @@
     <Compile Include="Models\CrowdAnkiJson.cs" />
     <Compile Include="PropertyExtensions\ItemsControlExtensions.cs" />
     <Compile Include="Query\Nihongodera.cs" />
-    <Compile Include="Scripts\EScripts.cs" />
     <Compile Include="Query\IQuery.cs" />
+    <Compile Include="Scripts\MirrorScript.cs" />
+    <Compile Include="Scripts\NoneScript.cs" />
     <Compile Include="Scripts\NotesScript.cs" />
     <Compile Include="Scripts\DictionaryFormScript.cs" />
     <Compile Include="Scripts\FuriganaScript.cs" />
-    <Compile Include="NoteField.xaml.cs">
-      <DependentUpon>NoteField.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Scripts\Script.cs" />
-    <Compile Include="Scripts\Script2.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ViewModels\DeckViewModel.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />
@@ -121,22 +118,10 @@
     <Compile Include="Views\NoteView.xaml.cs">
       <DependentUpon>NoteView.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="NoteField.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\DeckView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

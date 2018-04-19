@@ -61,7 +61,7 @@ namespace AnkiEditor.ViewModels
             _note.tags.ForEach(Tags.Add);
 
             foreach (var fieldViewModel in _noteModel.flds.Zip(_note.fields,
-                (model, val) => new FieldViewModel(model.name)
+                (model, val) => new FieldViewModel(model.name, this)
                 {
                     Value = val
                 }))

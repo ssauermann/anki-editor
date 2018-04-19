@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using AnkiEditor.Models;
+using AnkiEditor.Query;
+using AnkiEditor.Scripts;
 using Caliburn.Micro;
 
 namespace AnkiEditor.ViewModels
@@ -16,6 +18,7 @@ namespace AnkiEditor.ViewModels
     {
         private readonly Deck _deckModel;
         private readonly Dictionary<string, Models.NoteModel> _noteModels = new Dictionary<string, Models.NoteModel>();
+        private readonly IQuery query = new Nihongodera();
 
         public DeckViewModel(Models.Deck deckModel)
         {
@@ -46,13 +49,27 @@ namespace AnkiEditor.ViewModels
 
             var defaultLang = InputLanguageManager.Current.CurrentInputLanguage.Name;
 
+            var defaultScript = new NoneScript("None");
+            Scripts.Add(defaultScript);
+            Scripts.Add(new MirrorScript("Clone"));
+            Scripts.Add(new FuriganaScript(query, "Furigana"));
+            Scripts.Add(new DictionaryFormScript(query, "Dictionary Form"));
+            Scripts.Add(new NotesScript(query, "Notes"));
+
+
             foreach (var noteModel in deckModel.note_models)
             {
                 var prefix = noteModel.crowdanki_uuid;
 
                 foreach (var fld in noteModel.flds)
                 {
-                    FieldSettings.Add($"{prefix}_{fld.name}", new FieldSettings(){Language = defaultLang});
+                    FieldSettings.Add($"{prefix}_{fld.name}", new FieldSettings()
+                    {
+                        Language = defaultLang,
+                        Keep = false,
+                        ScriptOverwrite = false,
+                        Script = defaultScript,
+                    });
                 }
             }
         }
@@ -101,7 +118,11 @@ namespace AnkiEditor.ViewModels
             get => _selectedNoteViewModel;
             set
             {
+                if (value == _selectedNoteViewModel)
+                    return;
+
                 _selectedNoteViewModel = value;
+                SelectedField = _selectedNoteViewModel?.SelectedField?.Name;
                 NotifyOfPropertyChange(() => SelectedNoteViewModel);
                 NotifyOfPropertyChange(() => CanDeleteNote);
                 NotifyOfPropertyChange(() => SettingsForField);
@@ -126,6 +147,8 @@ namespace AnkiEditor.ViewModels
 
         public ObservableCollection<string> Languages { get; } = new ObservableCollection<string>();
 
+        public ObservableCollection<Scripts.Script> Scripts { get; } = new ObservableCollection<Script>();
+
         public Dictionary<string, FieldSettings> FieldSettings = new Dictionary<string, FieldSettings>();
         private string _selectedField;
 
@@ -141,6 +164,7 @@ namespace AnkiEditor.ViewModels
         }
 
         public FieldSettings SettingsForField => FieldSettings.GetValueOrDefault($"{SelectedNoteViewModel.Uuid}_{SelectedField}");
+
 
         #endregion
 

@@ -1,16 +1,19 @@
-﻿namespace AnkiEditor.Scripts
+﻿using System;
+using System.Threading.Tasks;
+using AnkiEditor.Models;
+using AnkiEditor.ViewModels;
+
+namespace AnkiEditor.Scripts
 {
     public abstract class Script
     {
-        protected readonly NoteField Self;
+        public string DisplayName { get;}
 
-        protected Script(NoteField self)
+        protected Script(string displayName)
         {
-            Self = self;
+            DisplayName = displayName;
         }
 
-        public abstract void Start();
-
-        public abstract void Stop();
+        public abstract Task<string> Execute(string src);
     }
 }

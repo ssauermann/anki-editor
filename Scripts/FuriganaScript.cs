@@ -1,21 +1,21 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AnkiEditor.Query;
 
 namespace AnkiEditor.Scripts
 {
-    class FuriganaScript : Script2
+    class FuriganaScript : Script
     {
         private readonly IQuery _query;
 
-        public FuriganaScript(NoteField self, NoteField other, IQuery query) : base(self, other)
+        public FuriganaScript(IQuery query, string displayName) : base(displayName)
         {
             _query = query;
         }
 
-        public override async void Execute(object sender, EventArgs args)
+        public override Task<string> Execute(string src)
         {
-            if (Other.FieldText == string.Empty || Self.FieldText != string.Empty) return;
-            Self.FieldText = await _query.FuriganaForm(Other.FieldText);
+            return _query.FuriganaForm(src);
         }
 
 

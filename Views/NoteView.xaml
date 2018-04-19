@@ -10,36 +10,49 @@
         <!--TODO Preview 
         <WebBrowser DockPanel.Dock="Right" Width="400"  previewEngine:BrowserBehavior.Html="{Binding PreviewHtml}"/>
         -->
-        <ToolBarTray Orientation="Vertical" DockPanel.Dock="Right">
+        <ToolBarTray Orientation="Vertical" DockPanel.Dock="Right" KeyboardNavigation.IsTabStop="False">
             <ToolBar>
-                <ToggleButton Command="EditingCommands.ToggleBold" IsChecked="{Binding Path=SelectionIsBold, Mode=TwoWay}">
+                <ToggleButton Command="EditingCommands.ToggleBold" IsChecked="{Binding Path=SelectionIsBold, Mode=TwoWay}" KeyboardNavigation.IsTabStop="False">
                     Bold
                     <!--<Image Source="/WpfTutorialSamples;component/Images/text_bold.png" Width="16" Height="16" />-->
                 </ToggleButton>
-                <ToggleButton Command="EditingCommands.ToggleItalic" IsChecked="{Binding Path=SelectionIsBold, Mode=TwoWay}">
+                <ToggleButton Command="EditingCommands.ToggleItalic" IsChecked="{Binding Path=SelectionIsBold, Mode=TwoWay}" KeyboardNavigation.IsTabStop="False">
                     Italic
                     <!--<Image Source="/WpfTutorialSamples;component/Images/text_italic.png" Width="16" Height="16" />-->
                 </ToggleButton>
-                <ToggleButton Command="EditingCommands.ToggleUnderline">
+                <ToggleButton Command="EditingCommands.ToggleUnderline" KeyboardNavigation.IsTabStop="False">
                     Underline
                     <!--<Image Source="/WpfTutorialSamples;component/Images/text_underline.png" Width="16" Height="16" />-->
                 </ToggleButton>
+            </ToolBar>
+            <ToolBar Visibility="{Binding Deck.SettingsForField, TargetNullValue=Hidden}">
+                <Label>Keyboard Layout:</Label>
+                <ComboBox x:Name="Deck_Languages" SelectedItem="{Binding Deck.SettingsForField.Language}" KeyboardNavigation.IsTabStop="False" />
+                <Grid>
+                    <CheckBox x:Name="Deck_SettingsForField_Keep" IsThreeState="True" Content="Keep Content" KeyboardNavigation.IsTabStop="False"/>
+                </Grid>
                 <Separator />
-                <ComboBox x:Name="Deck_Languages" SelectedItem="{Binding Deck.SettingsForField.Language}" Visibility="{Binding Deck.SettingsForField, TargetNullValue=Hidden}"/>
+                <Label>Script:</Label>
+                <ComboBox x:Name="Deck_Scripts" SelectedItem="{Binding Deck.SettingsForField.Script}" DisplayMemberPath="DisplayName" KeyboardNavigation.IsTabStop="False"/>
+                <Label>Script Source:</Label>
+                <ComboBox x:Name="Deck_SelectedNoteViewModel_Fields" SelectedItem="{Binding Deck.SettingsForField.ScriptSrc}" DisplayMemberPath="Name" KeyboardNavigation.IsTabStop="False" />
+                <Grid>
+                    <CheckBox x:Name="Deck_SettingsForField_ScriptOverwrite" Content="Overwrite Content" KeyboardNavigation.IsTabStop="False"/>
+                </Grid>
             </ToolBar>
         </ToolBarTray>
         <DockPanel>
             <ListView DockPanel.Dock="Bottom" x:Name="Tags">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"></StackPanel>
+                        <StackPanel Orientation="Horizontal" KeyboardNavigation.IsTabStop="False"></StackPanel>
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
             </ListView>
             <ListView x:Name="Fields">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel></StackPanel>
+                        <StackPanel KeyboardNavigation.IsTabStop="False"></StackPanel>
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
                 <ListView.ItemContainerStyle>
@@ -51,6 +64,254 @@
         </DockPanel>
     </DockPanel>
 </UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
