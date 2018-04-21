@@ -15,6 +15,7 @@ namespace AnkiEditor.Scripts
 
         public override Task<string> Execute(string src)
         {
+            if (string.IsNullOrWhiteSpace(src)) return Task.FromResult<string>(null);
             return _query.FuriganaForm(src);
         }
 

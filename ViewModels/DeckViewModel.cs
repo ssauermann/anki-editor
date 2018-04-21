@@ -19,7 +19,7 @@ namespace AnkiEditor.ViewModels
     {
         private readonly Deck _deckModel;
         private readonly Dictionary<string, Models.NoteModel> _noteModels = new Dictionary<string, Models.NoteModel>();
-        private readonly IQuery query = new Nihongodera();
+        private readonly IQuery _query = new Nihongodera();
 
         public DeckViewModel(Models.Deck deckModel)
         {
@@ -35,9 +35,9 @@ namespace AnkiEditor.ViewModels
             var defaultScript = new NoneScript("None");
             Scripts.Add(defaultScript);
             Scripts.Add(new MirrorScript("Clone"));
-            Scripts.Add(new FuriganaScript(query, "Furigana"));
-            Scripts.Add(new DictionaryFormScript(query, "Dictionary Form"));
-            Scripts.Add(new NotesScript(query, "Notes"));
+            Scripts.Add(new FuriganaScript(_query, "Furigana"));
+            Scripts.Add(new DictionaryFormScript(_query, "Dictionary Form"));
+            Scripts.Add(new NotesScript(_query, "Notes"));
 
 
             foreach (var noteModel in deckModel.note_models)

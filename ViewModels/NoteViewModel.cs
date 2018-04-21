@@ -75,6 +75,7 @@ namespace AnkiEditor.ViewModels
                     };
 
                     settings.PropertyChanged += (sender, args) => fvm.InputLanguage = settings.Language;
+                    settings.ScriptSrc = fvm;
 
                     return fvm;
                 }))

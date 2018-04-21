@@ -45,7 +45,7 @@ namespace AnkiEditor.ViewModels
             var settings = _note.Deck.FieldSettings[$"{_note.Uuid}_{Name}"];
 
             if (settings.ScriptSrc == null) return;
-
+            
             if (settings.ScriptOverwrite || string.IsNullOrWhiteSpace(Value))
             {
                 var result = await settings.Script.Execute(settings.ScriptSrc.Value);
@@ -62,6 +62,21 @@ namespace AnkiEditor.ViewModels
                 _inputLanguage = value;
                 NotifyOfPropertyChange(() => InputLanguage);
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is FieldViewModel model && Equals(model);
+        }
+
+        protected bool Equals(FieldViewModel other)
+        {
+            return string.Equals(Name, other.Name);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Name != null ? Name.GetHashCode() : 0);
         }
     }
 }

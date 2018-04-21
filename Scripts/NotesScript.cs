@@ -15,6 +15,7 @@ namespace AnkiEditor.Scripts
 
         public override async Task<string> Execute(string src)
         {
+            if (string.IsNullOrWhiteSpace(src)) return null;
             var info = await _query.WordInfo(src);
             return string.Join(", ", info);
         }
