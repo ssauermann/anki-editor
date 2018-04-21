@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,30 +25,12 @@ namespace AnkiEditor.ViewModels
         {
             _deckModel = deckModel;
 
-            // Create dictionary of noteModels
-            foreach (var noteModel in deckModel.note_models)
-            {
-                _noteModels.Add(noteModel.crowdanki_uuid, noteModel);
-                NoteModels.Add(noteModel);
-            }
-
-            SelectedNoteModel = NoteModels.First();
-            
-            foreach (var note in deckModel.notes)
-            {
-                // Add notes where notemodel exists
-                if (_noteModels.TryGetValue(note.note_model_uuid, out var noteModel))
-                {
-                    NoteViewModels.Add(new NoteViewModel(note, noteModel, this));
-                }
-            }
-
             foreach (var lang in InputLanguageManager.Current.AvailableInputLanguages ?? new List<object>())
             {
-                Languages.Add(lang.ToString());
+                Languages.Add(CultureInfo.CreateSpecificCulture(lang.ToString()));
             }
 
-            var defaultLang = InputLanguageManager.Current.CurrentInputLanguage.Name;
+            var defaultLang = InputLanguageManager.Current.CurrentInputLanguage;
 
             var defaultScript = new NoneScript("None");
             Scripts.Add(defaultScript);
@@ -72,6 +55,25 @@ namespace AnkiEditor.ViewModels
                     });
                 }
             }
+
+            // Create dictionary of noteModels
+            foreach (var noteModel in deckModel.note_models)
+            {
+                _noteModels.Add(noteModel.crowdanki_uuid, noteModel);
+                NoteModels.Add(noteModel);
+            }
+
+            SelectedNoteModel = NoteModels.First();
+            
+            foreach (var note in deckModel.notes)
+            {
+                // Add notes where notemodel exists
+                if (_noteModels.TryGetValue(note.note_model_uuid, out var noteModel))
+                {
+                    NoteViewModels.Add(new NoteViewModel(note, noteModel, this));
+                }
+            }
+
         }
 
         public string Name => _deckModel.name;
@@ -145,7 +147,7 @@ namespace AnkiEditor.ViewModels
         #region FieldSettings
 
 
-        public ObservableCollection<string> Languages { get; } = new ObservableCollection<string>();
+        public ObservableCollection<CultureInfo> Languages { get; } = new ObservableCollection<CultureInfo>();
 
         public ObservableCollection<Scripts.Script> Scripts { get; } = new ObservableCollection<Script>();
 
@@ -163,7 +165,12 @@ namespace AnkiEditor.ViewModels
             }
         }
 
-        public FieldSettings SettingsForField => FieldSettings.GetValueOrDefault($"{SelectedNoteViewModel.Uuid}_{SelectedField}");
+        public FieldSettings GetFieldSettings(string noteModelUuid, string fieldName)
+        {
+            return FieldSettings.GetValueOrDefault($"{noteModelUuid}_{fieldName}");
+        }
+
+        public FieldSettings SettingsForField => GetFieldSettings(SelectedNoteViewModel.Uuid, SelectedField);
 
 
         #endregion

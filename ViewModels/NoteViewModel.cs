@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using AnkiEditor.Models;
 using Caliburn.Micro;
 
@@ -61,9 +63,20 @@ namespace AnkiEditor.ViewModels
             _note.tags.ForEach(Tags.Add);
 
             foreach (var fieldViewModel in _noteModel.flds.Zip(_note.fields,
-                (model, val) => new FieldViewModel(model.name, this)
+                (model, val) =>
                 {
-                    Value = val
+                    var settings = Deck.GetFieldSettings(_noteModel.crowdanki_uuid, model.name);
+                    var defaultLang = settings.Language;
+
+                    var fvm = new FieldViewModel(model.name, this)
+                    {
+                        Value = val,
+                        InputLanguage = defaultLang,
+                    };
+
+                    settings.PropertyChanged += (sender, args) => fvm.InputLanguage = settings.Language;
+
+                    return fvm;
                 }))
             {
                 Fields.Add(fieldViewModel);
@@ -98,5 +111,6 @@ namespace AnkiEditor.ViewModels
         }
 
         public string Uuid { get; private set; }
+
     }
 }

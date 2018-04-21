@@ -1,4 +1,5 @@
-﻿using AnkiEditor.Scripts;
+﻿using System.Globalization;
+using AnkiEditor.Scripts;
 using AnkiEditor.ViewModels;
 using Caliburn.Micro;
 
@@ -6,13 +7,13 @@ namespace AnkiEditor.Models
 {
     public class FieldSettings : PropertyChangedBase
     {
-        private string _language;
+        private CultureInfo _language;
         private bool? _keep;
         private FieldViewModel _scriptSrc;
         private bool _overwrite;
         private Script _script;
 
-        public string Language
+        public CultureInfo Language
         {
             get => _language;
             set

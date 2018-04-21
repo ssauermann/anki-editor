@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace AnkiEditor.ViewModels
         }
 
         private string _value;
-        private string _selectedLanguage;
+        private CultureInfo _inputLanguage;
 
         public string Value
         {
@@ -33,16 +34,6 @@ namespace AnkiEditor.ViewModels
         }
 
         public string Name { get; }
-
-        public string SelectedLanguage
-        {
-            get => _selectedLanguage;
-            set
-            {
-                _selectedLanguage = value;
-                NotifyOfPropertyChange(() => SelectedLanguage);
-            }
-        }
 
         public void TextChanged(RichTextBox sender)
         {
@@ -60,6 +51,16 @@ namespace AnkiEditor.ViewModels
                 var result = await settings.Script.Execute(settings.ScriptSrc.Value);
                 if(result!=null)
                     Value = result;
+            }
+        }
+
+        public CultureInfo InputLanguage
+        {
+            get => _inputLanguage;
+            set
+            {
+                _inputLanguage = value;
+                NotifyOfPropertyChange(() => InputLanguage);
             }
         }
     }
