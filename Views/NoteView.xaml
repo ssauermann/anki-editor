@@ -5,66 +5,338 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AnkiEditor.Views"
              xmlns:cal="http://www.caliburnproject.org"
+             xmlns:ankiEditor="clr-namespace:AnkiEditor"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <DataTemplate x:Key="NameTokenTemplate">
+            <Border BorderBrush="LightGray" BorderThickness="1" Height="Auto" Margin="2,0">
+                <TextBlock TextWrapping="NoWrap" Text="{Binding}" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="1,0" FontWeight="Bold"/>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
     <DockPanel>
         <!--TODO Preview 
         <WebBrowser DockPanel.Dock="Right" Width="400"  previewEngine:BrowserBehavior.Html="{Binding PreviewHtml}"/>
         -->
-        <ToolBarTray Orientation="Vertical" DockPanel.Dock="Right" KeyboardNavigation.IsTabStop="False">
+        <ToolBarTray Orientation="Vertical" DockPanel.Dock="Right">
             <ToolBar>
-                <ToggleButton Command="EditingCommands.ToggleBold" IsChecked="{Binding Path=SelectionIsBold, Mode=TwoWay}" KeyboardNavigation.IsTabStop="False">
+                <ToggleButton Command="EditingCommands.ToggleBold" IsChecked="{Binding Path=SelectionIsBold, Mode=TwoWay}">
                     Bold
                     <!--<Image Source="/WpfTutorialSamples;component/Images/text_bold.png" Width="16" Height="16" />-->
                 </ToggleButton>
-                <ToggleButton Command="EditingCommands.ToggleItalic" IsChecked="{Binding Path=SelectionIsBold, Mode=TwoWay}" KeyboardNavigation.IsTabStop="False">
+                <ToggleButton Command="EditingCommands.ToggleItalic" IsChecked="{Binding Path=SelectionIsBold, Mode=TwoWay}">
                     Italic
                     <!--<Image Source="/WpfTutorialSamples;component/Images/text_italic.png" Width="16" Height="16" />-->
                 </ToggleButton>
-                <ToggleButton Command="EditingCommands.ToggleUnderline" KeyboardNavigation.IsTabStop="False">
+                <ToggleButton Command="EditingCommands.ToggleUnderline">
                     Underline
                     <!--<Image Source="/WpfTutorialSamples;component/Images/text_underline.png" Width="16" Height="16" />-->
                 </ToggleButton>
             </ToolBar>
             <ToolBar Visibility="{Binding Deck.SettingsForField, TargetNullValue=Hidden}">
                 <Label>Keyboard Layout:</Label>
-                <ComboBox x:Name="Deck_Languages" DisplayMemberPath="Name" SelectedItem="{Binding Deck.SettingsForField.Language}" KeyboardNavigation.IsTabStop="False"/>
+                <ComboBox x:Name="Deck_Languages" DisplayMemberPath="Name" SelectedItem="{Binding Deck.SettingsForField.Language}"/>
                 <Grid>
-                    <CheckBox x:Name="Deck_SettingsForField_Keep" IsThreeState="True" Content="Keep Content" KeyboardNavigation.IsTabStop="False"/>
+                    <CheckBox x:Name="Deck_SettingsForField_Keep" IsThreeState="True" Content="Keep Content"/>
                 </Grid>
                 <Separator />
                 <Label>Script:</Label>
-                <ComboBox x:Name="Deck_Scripts" SelectedItem="{Binding Deck.SettingsForField.Script}" DisplayMemberPath="DisplayName" KeyboardNavigation.IsTabStop="False"/>
+                <ComboBox x:Name="Deck_Scripts" SelectedItem="{Binding Deck.SettingsForField.Script}" DisplayMemberPath="DisplayName"/>
                 <Label>Script Source:</Label>
-                <ComboBox x:Name="Deck_SelectedNoteViewModel_Fields" SelectedItem="{Binding Deck.SettingsForField.ScriptSrc}" DisplayMemberPath="Name" KeyboardNavigation.IsTabStop="False" />
+                <ComboBox x:Name="Deck_SelectedNoteViewModel_Fields" SelectedItem="{Binding Deck.SettingsForField.ScriptSrc}" DisplayMemberPath="Name"/>
                 <Grid>
-                    <CheckBox x:Name="Deck_SettingsForField_ScriptOverwrite" Content="Overwrite Content" KeyboardNavigation.IsTabStop="False"/>
+                    <CheckBox x:Name="Deck_SettingsForField_ScriptOverwrite" Content="Overwrite Content"/>
                 </Grid>
             </ToolBar>
         </ToolBarTray>
-        <DockPanel>
+        <DockPanel  KeyboardNavigation.TabNavigation="Cycle">
             <ListView DockPanel.Dock="Bottom" x:Name="Tags">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" KeyboardNavigation.IsTabStop="False"></StackPanel>
+                        <StackPanel Orientation="Horizontal"></StackPanel>
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
             </ListView>
-            <ListView x:Name="Fields">
+            <ankiEditor:TokenizingControl DockPanel.Dock="Bottom" x:Name="Tokenizer" TokenTemplate="{DynamicResource NameTokenTemplate}" VerticalScrollBarVisibility="Auto">
+                <FlowDocument>
+                    <Paragraph>
+                        <Run />
+                    </Paragraph>
+                </FlowDocument>
+            </ankiEditor:TokenizingControl>
+            <ListView x:Name="Fields" KeyboardNavigation.TabNavigation="Continue">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel KeyboardNavigation.IsTabStop="False"></StackPanel>
+                        <StackPanel></StackPanel>
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                        <Setter Property="IsTabStop" Value="false"/>
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
         </DockPanel>
     </DockPanel>
 </UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

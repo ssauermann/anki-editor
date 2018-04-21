@@ -95,6 +95,7 @@
     <Compile Include="Scripts\DictionaryFormScript.cs" />
     <Compile Include="Scripts\FuriganaScript.cs" />
     <Compile Include="Scripts\Script.cs" />
+    <Compile Include="TokenizingControl.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ViewModels\DeckViewModel.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />

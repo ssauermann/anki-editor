@@ -11,22 +11,22 @@
         <DockPanel LastChildFill="True" Grid.ColumnSpan="2">
             <ToolBarTray DockPanel.Dock="Top">
                 <ToolBar>
-                    <Button x:Name="OpenDeck" KeyboardNavigation.IsTabStop="False" ToolTip="Open a CrowdAnki json file.">
+                    <Button x:Name="OpenDeck" ToolTip="Open a CrowdAnki json file.">
                         <AccessText>_Open Deck</AccessText>
                     </Button>
-                    <Button x:Name="CloseDeck" KeyboardNavigation.IsTabStop="False" ToolTip="Close the current deck.">
+                    <Button x:Name="CloseDeck" ToolTip="Close the current deck.">
                         <AccessText>_Close Deck</AccessText>
                     </Button>
-                    <Button x:Name="SaveDeck" KeyboardNavigation.IsTabStop="False" ToolTip="Save the current deck.">
+                    <Button x:Name="SaveDeck" ToolTip="Save the current deck.">
                         <AccessText>_Save Deck</AccessText>
                     </Button>
                 </ToolBar>
                 <ToolBar Visibility="{Binding CurrentDeck, TargetNullValue=Hidden}">
-                    <ComboBox x:Name="CurrentDeck_NoteModels" DisplayMemberPath="name" SelectedItem="CurrentDeck_SelectedNoteModel" KeyboardNavigation.IsTabStop="False"/>
-                    <Button cal:Message.Attach="AddNote" cal:Action.Target="{Binding CurrentDeck}" KeyboardNavigation.IsTabStop="False" ToolTip="Add a new note." >
+                    <ComboBox x:Name="CurrentDeck_NoteModels" DisplayMemberPath="name" SelectedItem="CurrentDeck_SelectedNoteModel"/>
+                    <Button cal:Message.Attach="AddNote" cal:Action.Target="{Binding CurrentDeck}" ToolTip="Add a new note." >
                         <AccessText>_Add Note</AccessText>
                     </Button>
-                    <Button cal:Message.Attach="DeleteNote" cal:Action.Target="{Binding CurrentDeck}" KeyboardNavigation.IsTabStop="False" ToolTip="Delete the selected note.">
+                    <Button cal:Message.Attach="DeleteNote" cal:Action.Target="{Binding CurrentDeck}" ToolTip="Delete the selected note.">
                         <AccessText>_Delete Note</AccessText>
                     </Button>
                 </ToolBar>
