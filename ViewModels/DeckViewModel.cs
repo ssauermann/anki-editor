@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using AnkiEditor.Models;
 using AnkiEditor.Query;
@@ -111,6 +113,22 @@ namespace AnkiEditor.ViewModels
 
 
         public ObservableCollection<NoteViewModel> NoteViewModels { get; } = new ObservableCollection<NoteViewModel>();
+
+        private ICollectionView _sortedNoteViewModel;
+        public ICollectionView NoteViewModelsSorted
+        {
+            get
+            {
+                if (_sortedNoteViewModel == null)
+                {
+                    _sortedNoteViewModel = CollectionViewSource.GetDefaultView(NoteViewModels);
+                    _sortedNoteViewModel.SortDescriptions.Add(new SortDescription(nameof(NoteViewModel.SortName), ListSortDirection.Ascending));
+                }
+
+                return _sortedNoteViewModel;
+            }
+        }
+
         private NoteViewModel _selectedNoteViewModel;
         private Models.NoteModel _selectedNoteModel;
         private bool _scrollToSelected;

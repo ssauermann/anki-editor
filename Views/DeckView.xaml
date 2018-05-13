@@ -13,7 +13,7 @@
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ListView Grid.Column="0" x:Name="NoteViewModels"
+        <ListView Grid.Column="0" x:Name="NoteViewModelsSorted"
                       SelectedItem="{Binding Path=SelectedNoteViewModel, Mode=TwoWay}"
                       DisplayMemberPath="SortName" HorizontalAlignment="Stretch" SelectionMode="Single" Tag="{Binding ScrollToSelected, Mode=TwoWay}" SelectionChanged="NoteViewModels_SelectionChanged" />
         <GridSplitter Grid.Column="1" HorizontalAlignment="Center" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows"/>

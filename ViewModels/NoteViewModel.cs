@@ -58,7 +58,6 @@ namespace AnkiEditor.ViewModels
 
         private void Initialize()
         {
-
             Uuid = _noteModel.crowdanki_uuid;
             _note.tags.ForEach(Tags.Add);
 
@@ -91,10 +90,19 @@ namespace AnkiEditor.ViewModels
 
         private void Field_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            NotifyOfPropertyChange(() => SortName);
+            var changed = sender as FieldViewModel;
+            if (Equals(changed, SortField) && e.PropertyName == nameof(FieldViewModel.Value))
+            {
+                NotifyOfPropertyChange(() => SortName);
+                Deck.NoteViewModelsSorted.Refresh();
+                //TODO Enable scrolling when DeckView code behind is updated on ScrollToSelected change instead of selection changed
+                //Deck.ScrollToSelected = true; 
+            }
         }
-        
-        public string SortName => Fields[_noteModel.sortf].Value;
+
+        public string SortName => SortField.Value;
+
+        public FieldViewModel SortField => Fields[_noteModel.sortf];
 
         public ObservableCollection<string> Tags { get; } = new ObservableCollection<string>();
 
@@ -112,6 +120,5 @@ namespace AnkiEditor.ViewModels
         }
 
         public string Uuid { get; private set; }
-
     }
 }
