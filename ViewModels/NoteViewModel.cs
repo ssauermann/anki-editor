@@ -91,13 +91,21 @@ namespace AnkiEditor.ViewModels
         private void Field_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             var changed = sender as FieldViewModel;
-            if (Equals(changed, SortField) && e.PropertyName == nameof(FieldViewModel.Value))
+
+            if (e.PropertyName == nameof(FieldViewModel.Value))
             {
-                NotifyOfPropertyChange(() => SortName);
-                Deck.NoteViewModelsSorted.Refresh();
-                //TODO Enable scrolling when DeckView code behind is updated on ScrollToSelected change instead of selection changed
-                //Deck.ScrollToSelected = true; 
+                Deck.DeckHasChanged = true;
+
+
+                if (Equals(changed, SortField))
+                {
+                    NotifyOfPropertyChange(() => SortName);
+                    Deck.NoteViewModelsSorted.Refresh();
+                    //TODO Enable scrolling when DeckView code behind is updated on ScrollToSelected change instead of selection changed
+                    //Deck.ScrollToSelected = true; 
+                }
             }
+
         }
 
         public string SortName => SortField.Value;

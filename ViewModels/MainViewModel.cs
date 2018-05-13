@@ -14,7 +14,6 @@ namespace AnkiEditor.ViewModels
     {
         private string _currentDeckFile;
         private DeckViewModel _currentDeck;
-        private bool _deckHasChanged;
 
         public bool CanOpenDeck => CurrentDeck==null;
 
@@ -32,6 +31,14 @@ namespace AnkiEditor.ViewModels
                 var jsonString = File.ReadAllText(_currentDeckFile);
                 var deck = JsonConvert.DeserializeObject<Models.Deck>(jsonString);
                 CurrentDeck = new DeckViewModel(deck);
+
+                CurrentDeck.PropertyChanged += (sender, args) =>
+                {
+                    if (args.PropertyName == "DeckHasChanged")
+                    {
+                        NotifyOfPropertyChange(() => CanSaveDeck);
+                    }
+                };
             }
         }
 
@@ -42,24 +49,13 @@ namespace AnkiEditor.ViewModels
             CurrentDeck = null;
         }
 
-        public bool DeckHasChanged
-        {
-            get => _deckHasChanged;
-            private set
-            {
-                _deckHasChanged = value;
-                NotifyOfPropertyChange(() => DeckHasChanged);
-                NotifyOfPropertyChange(() => CanSaveDeck);
-            }
-        }
-
-        public bool CanSaveDeck => CurrentDeck != null && DeckHasChanged;
+        public bool CanSaveDeck => CurrentDeck != null && CurrentDeck.DeckHasChanged;
 
         public void SaveDeck()
         {
             //TODO
             throw new NotImplementedException();
-            DeckHasChanged = false;
+            CurrentDeck.DeckHasChanged = false;
         }
 
         public DeckViewModel CurrentDeck

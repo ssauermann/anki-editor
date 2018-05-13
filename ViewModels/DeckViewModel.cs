@@ -83,6 +83,16 @@ namespace AnkiEditor.ViewModels
 
         public int NoteCount => NoteViewModels.Count;
 
+        private bool _deckHasChanged;
+        public bool DeckHasChanged
+        {
+            get => _deckHasChanged;
+            set
+            {
+                _deckHasChanged = value;
+                NotifyOfPropertyChange(() => DeckHasChanged);
+            }
+        }
 
         public bool CanAddNote => SelectedNoteModel != null;
 
@@ -92,6 +102,7 @@ namespace AnkiEditor.ViewModels
             NoteViewModels.Add(newNote);
             ScrollToSelected = true;
             SelectedNoteViewModel = newNote;
+            DeckHasChanged = true;
         }
 
         public bool ScrollToSelected
@@ -109,6 +120,7 @@ namespace AnkiEditor.ViewModels
         public void DeleteNote()
         {
             NoteViewModels.Remove(SelectedNoteViewModel);
+            DeckHasChanged = true;
         }
 
 
