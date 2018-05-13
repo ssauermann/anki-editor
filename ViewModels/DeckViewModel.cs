@@ -78,6 +78,7 @@ namespace AnkiEditor.ViewModels
                 }
             }
 
+            Sort();
         }
 
 
@@ -118,21 +119,7 @@ namespace AnkiEditor.ViewModels
                 NotifyOfPropertyChange(() => DeckHasChanged);
             }
         }
-        public ObservableCollection<NoteViewModel> NoteViewModels { get; } = new ObservableCollection<NoteViewModel>();
-
-        public ICollectionView NoteViewModelsSorted
-        {
-            get
-            {
-                if (_sortedNoteViewModel == null)
-                {
-                    _sortedNoteViewModel = CollectionViewSource.GetDefaultView(NoteViewModels);
-                    _sortedNoteViewModel.SortDescriptions.Add(new SortDescription(nameof(NoteViewModel.SortName), ListSortDirection.Ascending));
-                }
-
-                return _sortedNoteViewModel;
-            }
-        }
+        public SmartCollection<NoteViewModel> NoteViewModels { get; } = new SmartCollection<NoteViewModel>();
 
         public NoteViewModel SelectedNoteViewModel
         {
@@ -210,8 +197,19 @@ namespace AnkiEditor.ViewModels
             }
         }
 
-        public FieldSettings SettingsForField => DeckSettings.GetFieldSettings(SelectedNoteViewModel.Uuid, SelectedField);
+        public FieldSettings SettingsForField => DeckSettings.GetFieldSettings(SelectedNoteViewModel?.Uuid, SelectedField);
 
+
+        #endregion
+
+        #region Methods
+
+        public void Sort()
+        {
+            var selection = SelectedNoteViewModel;
+            NoteViewModels.Sort(x => x.SortName);
+            SelectedNoteViewModel = selection;
+        }
 
         #endregion
 

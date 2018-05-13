@@ -29,9 +29,9 @@ namespace AnkiEditor.Views
         //TODO Scroll when Tag is updated, not only on selection changed
         private void NoteViewModels_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (NoteViewModelsSorted.Tag as bool? != true) return;
-            NoteViewModelsSorted.ScrollToCenterOfView(NoteViewModelsSorted.SelectedItem);
-            NoteViewModelsSorted.Tag = false;
+            if (NoteViewModels.Tag as bool? != true) return;
+            NoteViewModels.ScrollToCenterOfView(NoteViewModels.SelectedItem);
+            NoteViewModels.Tag = false;
         }
     }
 }

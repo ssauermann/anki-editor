@@ -140,7 +140,7 @@ namespace AnkiEditor.ViewModels
                 if (Equals(changed, SortField))
                 {
                     NotifyOfPropertyChange(() => SortName);
-                    Deck.NoteViewModelsSorted.Refresh();
+                    Deck.Sort();
                     //TODO Enable scrolling when DeckView code behind is updated on ScrollToSelected change instead of selection changed
                     //Deck.ScrollToSelected = true; 
                 }

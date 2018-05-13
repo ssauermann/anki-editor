@@ -84,6 +84,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="SmartCollection.cs" />
     <Compile Include="PropertyExtensions\BrowserBehavior.cs" />
     <Compile Include="Models\CrowdAnkiJson.cs" />
     <Compile Include="PropertyExtensions\ItemsControlExtensions.cs" />
