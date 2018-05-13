@@ -1,39 +1,45 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using AnkiEditor.Models;
 using AnkiEditor.Query;
 using AnkiEditor.Scripts;
+using AnkiEditor.Settings;
 using Caliburn.Micro;
 
 namespace AnkiEditor.ViewModels
 {
     public class DeckViewModel : PropertyChangedBase
     {
-        private readonly Deck _deckModel;
+        #region Fields
+
+        private readonly Models.Deck _deckModel;
+
         private readonly Dictionary<string, Models.NoteModel> _noteModels = new Dictionary<string, Models.NoteModel>();
         private readonly IQuery _query = new Nihongodera();
+
+        #endregion
+
+        #region Constructors
 
         public DeckViewModel(Models.Deck deckModel)
         {
             _deckModel = deckModel;
 
+            // Load available input languages
             foreach (var lang in InputLanguageManager.Current.AvailableInputLanguages ?? new List<object>())
             {
                 Languages.Add(CultureInfo.CreateSpecificCulture(lang.ToString()));
             }
 
+            // Load system default language
             var defaultLang = InputLanguageManager.Current.CurrentInputLanguage;
 
+            // TODO: Remove hard-coded initialization
+            // Initialize scripts
             var defaultScript = new NoneScript("None");
             Scripts.Add(defaultScript);
             Scripts.Add(new MirrorScript("Clone"));
@@ -42,20 +48,12 @@ namespace AnkiEditor.ViewModels
             Scripts.Add(new NotesScript(_query, "Notes"));
 
 
+            // Initialize deck settings
+            DeckSettings = new DeckSettings(defaultLang, defaultScript);
+
             foreach (var noteModel in deckModel.note_models)
             {
-                var prefix = noteModel.crowdanki_uuid;
-
-                foreach (var fld in noteModel.flds)
-                {
-                    FieldSettings.Add($"{prefix}_{fld.name}", new FieldSettings()
-                    {
-                        Language = defaultLang,
-                        Keep = false,
-                        ScriptOverwrite = false,
-                        Script = defaultScript,
-                    });
-                }
+                DeckSettings.AddFieldSettings(noteModel);
             }
 
             // Create dictionary of noteModels
@@ -66,45 +64,42 @@ namespace AnkiEditor.ViewModels
             }
 
             SelectedNoteModel = NoteModels.First();
-            
+
             foreach (var note in deckModel.notes)
             {
-                // Add notes where notemodel exists
+                // Add notes where note model exists
                 if (_noteModels.TryGetValue(note.note_model_uuid, out var noteModel))
                 {
                     NoteViewModels.Add(new NoteViewModel(note, noteModel, this));
+                }
+                else
+                {
+                    // TODO Error handling
                 }
             }
 
         }
 
+
+        #endregion
+
+        #region Backing Fields
+
+        private NoteViewModel _selectedNoteViewModel;
+        private Models.NoteModel _selectedNoteModel;
+        private bool _scrollToSelected;
+        private bool _deckHasChanged;
+        private ICollectionView _sortedNoteViewModel;
+
+        #endregion
+
+        #region Properties
+
+        public DeckSettings DeckSettings { get; }
+
         public string Name => _deckModel.name;
         public string Desc => _deckModel.desc;
-
         public int NoteCount => NoteViewModels.Count;
-
-        private bool _deckHasChanged;
-        public bool DeckHasChanged
-        {
-            get => _deckHasChanged;
-            set
-            {
-                _deckHasChanged = value;
-                NotifyOfPropertyChange(() => DeckHasChanged);
-            }
-        }
-
-        public bool CanAddNote => SelectedNoteModel != null;
-
-        public void AddNote()
-        {
-            var newNote = new NoteViewModel(SelectedNoteModel, this);
-            NoteViewModels.Add(newNote);
-            ScrollToSelected = true;
-            SelectedNoteViewModel = newNote;
-            DeckHasChanged = true;
-        }
-
         public bool ScrollToSelected
         {
             get => _scrollToSelected;
@@ -114,19 +109,17 @@ namespace AnkiEditor.ViewModels
                 NotifyOfPropertyChange(() => ScrollToSelected);
             }
         }
-
-        public bool CanDeleteNote => SelectedNoteViewModel != null;
-
-        public void DeleteNote()
+        public bool DeckHasChanged
         {
-            NoteViewModels.Remove(SelectedNoteViewModel);
-            DeckHasChanged = true;
+            get => _deckHasChanged;
+            set
+            {
+                _deckHasChanged = value;
+                NotifyOfPropertyChange(() => DeckHasChanged);
+            }
         }
-
-
         public ObservableCollection<NoteViewModel> NoteViewModels { get; } = new ObservableCollection<NoteViewModel>();
 
-        private ICollectionView _sortedNoteViewModel;
         public ICollectionView NoteViewModelsSorted
         {
             get
@@ -140,10 +133,6 @@ namespace AnkiEditor.ViewModels
                 return _sortedNoteViewModel;
             }
         }
-
-        private NoteViewModel _selectedNoteViewModel;
-        private Models.NoteModel _selectedNoteModel;
-        private bool _scrollToSelected;
 
         public NoteViewModel SelectedNoteViewModel
         {
@@ -173,15 +162,41 @@ namespace AnkiEditor.ViewModels
                 NotifyOfPropertyChange(() => SelectedNoteModel);
             }
         }
+        #endregion
+
+        #region Commands
+
+        public bool CanAddNote => SelectedNoteModel != null;
+
+        public void AddNote()
+        {
+            var newNote = new NoteViewModel(SelectedNoteModel, this);
+            NoteViewModels.Add(newNote);
+            ScrollToSelected = true;
+            SelectedNoteViewModel = newNote;
+            DeckHasChanged = true;
+            NotifyOfPropertyChange(() => NoteCount);
+        }
+
+
+        public bool CanDeleteNote => SelectedNoteViewModel != null;
+
+        public void DeleteNote()
+        {
+            NoteViewModels.Remove(SelectedNoteViewModel);
+            DeckHasChanged = true;
+            NotifyOfPropertyChange(() => NoteCount);
+        }
+
+        #endregion
 
         #region FieldSettings
 
 
         public ObservableCollection<CultureInfo> Languages { get; } = new ObservableCollection<CultureInfo>();
 
-        public ObservableCollection<Scripts.Script> Scripts { get; } = new ObservableCollection<Script>();
+        public ObservableCollection<Script> Scripts { get; } = new ObservableCollection<Script>();
 
-        public Dictionary<string, FieldSettings> FieldSettings = new Dictionary<string, FieldSettings>();
         private string _selectedField;
 
         public string SelectedField
@@ -195,12 +210,7 @@ namespace AnkiEditor.ViewModels
             }
         }
 
-        public FieldSettings GetFieldSettings(string noteModelUuid, string fieldName)
-        {
-            return FieldSettings.GetValueOrDefault($"{noteModelUuid}_{fieldName}");
-        }
-
-        public FieldSettings SettingsForField => GetFieldSettings(SelectedNoteViewModel.Uuid, SelectedField);
+        public FieldSettings SettingsForField => DeckSettings.GetFieldSettings(SelectedNoteViewModel.Uuid, SelectedField);
 
 
         #endregion

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Caliburn.Micro;
 using Microsoft.Win32;
 using Newtonsoft.Json;
@@ -12,10 +8,39 @@ namespace AnkiEditor.ViewModels
 {
     public class MainViewModel : Screen
     {
+        #region Fields
+
         private string _currentDeckFile;
+
+        #endregion
+
+        #region Backing Fields
+
         private DeckViewModel _currentDeck;
 
-        public bool CanOpenDeck => CurrentDeck==null;
+        #endregion
+
+        #region Properties
+
+        public DeckViewModel CurrentDeck
+        {
+            get => _currentDeck;
+            set
+            {
+                _currentDeck = value;
+                NotifyOfPropertyChange(() => CurrentDeck);
+                NotifyOfPropertyChange(() => CanOpenDeck);
+                NotifyOfPropertyChange(() => CanCloseDeck);
+                NotifyOfPropertyChange(() => CanSaveDeck);
+            }
+        }
+
+
+        #endregion
+
+        #region Commands
+
+        public bool CanOpenDeck => CurrentDeck == null;
 
         public void OpenDeck()
         {
@@ -58,18 +83,7 @@ namespace AnkiEditor.ViewModels
             CurrentDeck.DeckHasChanged = false;
         }
 
-        public DeckViewModel CurrentDeck
-        {
-            get => _currentDeck;
-            set
-            {
-                _currentDeck = value;
-                NotifyOfPropertyChange(() => CurrentDeck);
-                NotifyOfPropertyChange(() => CanOpenDeck);
-                NotifyOfPropertyChange(() => CanCloseDeck);
-                NotifyOfPropertyChange(() => CanSaveDeck);
-            }
-        }
+        #endregion
 
     }
 }

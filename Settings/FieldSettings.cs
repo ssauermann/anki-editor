@@ -3,7 +3,7 @@ using AnkiEditor.Scripts;
 using AnkiEditor.ViewModels;
 using Caliburn.Micro;
 
-namespace AnkiEditor.Models
+namespace AnkiEditor.Settings
 {
     public class FieldSettings : PropertyChangedBase
     {
@@ -23,6 +23,7 @@ namespace AnkiEditor.Models
             }
         }
 
+        // three state boolean: do keep (true), do not keep (false), keep once (null)
         public bool? Keep
         {
             get => _keep;
@@ -33,7 +34,7 @@ namespace AnkiEditor.Models
             }
         }
 
-        public Scripts.Script Script
+        public Script Script
         {
             get => _script;
             set

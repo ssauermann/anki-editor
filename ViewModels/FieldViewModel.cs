@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows.Controls;
 using Caliburn.Micro;
 
 namespace AnkiEditor.ViewModels
 {
-    public class FieldViewModel: PropertyChangedBase
+    public class FieldViewModel : PropertyChangedBase
     {
+        #region Fields
+
         private readonly NoteViewModel _note;
+
+        #endregion
+
+        #region Constructors
 
         public FieldViewModel(string name, NoteViewModel note)
         {
@@ -20,8 +20,16 @@ namespace AnkiEditor.ViewModels
             Name = name;
         }
 
+        #endregion
+
+        #region Backing Fields
+
         private string _value;
         private CultureInfo _inputLanguage;
+
+        #endregion
+
+        #region Properties
 
         public string Value
         {
@@ -32,27 +40,7 @@ namespace AnkiEditor.ViewModels
                 NotifyOfPropertyChange(() => Value);
             }
         }
-
         public string Name { get; }
-
-        public void TextChanged(RichTextBox sender)
-        {
-
-        }
-
-        public async void ExecuteScript()
-        {
-            var settings = _note.Deck.FieldSettings[$"{_note.Uuid}_{Name}"];
-
-            if (settings.ScriptSrc == null) return;
-            
-            if (settings.ScriptOverwrite || string.IsNullOrWhiteSpace(Value))
-            {
-                var result = await settings.Script.Execute(settings.ScriptSrc.Value);
-                if(result!=null)
-                    Value = result;
-            }
-        }
 
         public CultureInfo InputLanguage
         {
@@ -63,6 +51,33 @@ namespace AnkiEditor.ViewModels
                 NotifyOfPropertyChange(() => InputLanguage);
             }
         }
+        #endregion
+
+
+        public void TextChanged(RichTextBox sender)
+        {
+
+        }
+
+        public async void ExecuteScript()
+        {
+            var settings = _note.Deck.DeckSettings.GetFieldSettings(_note.Uuid, Name);
+
+            // No script source => do nothing
+            if (settings.ScriptSrc == null) return;
+
+            // Value is not empty and should not be overwritten => do nothing
+            if (!settings.ScriptOverwrite && !string.IsNullOrWhiteSpace(Value)) return;
+
+            // Execute script asynchronously
+            var result = await settings.Script.Execute(settings.ScriptSrc.Value);
+
+            // Null as result == error => do not change current value
+            if (result != null) Value = result;
+        }
+
+
+        #region Object Methods
 
         public override bool Equals(object obj)
         {
@@ -78,5 +93,8 @@ namespace AnkiEditor.ViewModels
         {
             return (Name != null ? Name.GetHashCode() : 0);
         }
+
+        #endregion
+
     }
 }

@@ -95,11 +95,12 @@
     <Compile Include="Scripts\DictionaryFormScript.cs" />
     <Compile Include="Scripts\FuriganaScript.cs" />
     <Compile Include="Scripts\Script.cs" />
+    <Compile Include="Settings\DeckSettings.cs" />
     <Compile Include="TokenizingControl.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ViewModels\DeckViewModel.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />
-    <Compile Include="Models\FieldSettings.cs" />
+    <Compile Include="Settings\FieldSettings.cs" />
     <Compile Include="ViewModels\FieldViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NoteViewModel.cs" />

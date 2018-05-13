@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using AnkiEditor.Models;
 using Caliburn.Micro;
 
 namespace AnkiEditor.ViewModels
 {
     public class NoteViewModel : PropertyChangedBase
     {
-        private readonly Note _note;
+        #region Fields
+
+        private readonly Models.Note _note;
         private readonly Models.NoteModel _noteModel;
-        public DeckViewModel Deck { get; }
-        private FieldViewModel _selectedField;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Create a new note
@@ -26,7 +23,7 @@ namespace AnkiEditor.ViewModels
         /// <param name="deck"></param>
         public NoteViewModel(Models.NoteModel noteModel, DeckViewModel deck)
         {
-            _note = new Note()
+            _note = new Models.Note()
             {
                 __type__ = "Note",
                 data = string.Empty,
@@ -56,15 +53,54 @@ namespace AnkiEditor.ViewModels
             Initialize();
         }
 
+        #endregion
+
+        #region Backing Fields
+
+        private FieldViewModel _selectedField;
+
+        #endregion
+
+        #region Properties
+        public DeckViewModel Deck { get; }
+
+        public string Uuid { get; private set; }
+
+        public string SortName => SortField.Value;
+
+        public FieldViewModel SortField => Fields[_noteModel.sortf];
+
+        public ObservableCollection<string> Tags { get; } = new ObservableCollection<string>();
+
+        public ObservableCollection<FieldViewModel> Fields { get; } = new ObservableCollection<FieldViewModel>();
+
+        public FieldViewModel SelectedField
+        {
+            get => _selectedField;
+            set
+            {
+                _selectedField = value;
+                NotifyOfPropertyChange(() => SelectedField);
+                Deck.SelectedField = value?.Name;
+            }
+        }
+        #endregion
+
+        #region Methods
+
         private void Initialize()
         {
             Uuid = _noteModel.crowdanki_uuid;
+
+            // Extract tags
             _note.tags.ForEach(Tags.Add);
 
+            // Zip field name and field value to get a list with (name, value) tuple entries.
             foreach (var fieldViewModel in _noteModel.flds.Zip(_note.fields,
                 (model, val) =>
                 {
-                    var settings = Deck.GetFieldSettings(_noteModel.crowdanki_uuid, model.name);
+                    // Create field view model and setup the field settings
+                    var settings = Deck.DeckSettings.GetFieldSettings(_noteModel.crowdanki_uuid, model.name);
                     var defaultLang = settings.Language;
 
                     var fvm = new FieldViewModel(model.name, this)
@@ -82,12 +118,16 @@ namespace AnkiEditor.ViewModels
                 Fields.Add(fieldViewModel);
             }
 
+            // Register property changed event for all fields
             foreach (var field in Fields)
             {
                 field.PropertyChanged += Field_PropertyChanged;
             }
         }
 
+        #endregion
+
+        #region Event Handlers
         private void Field_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             var changed = sender as FieldViewModel;
@@ -108,25 +148,7 @@ namespace AnkiEditor.ViewModels
 
         }
 
-        public string SortName => SortField.Value;
+        #endregion
 
-        public FieldViewModel SortField => Fields[_noteModel.sortf];
-
-        public ObservableCollection<string> Tags { get; } = new ObservableCollection<string>();
-
-        public ObservableCollection<FieldViewModel> Fields { get; } = new ObservableCollection<FieldViewModel>();
-
-        public FieldViewModel SelectedField
-        {
-            get => _selectedField;
-            set
-            {
-                _selectedField = value;
-                NotifyOfPropertyChange(() => SelectedField);
-                Deck.SelectedField = value?.Name;
-            }
-        }
-
-        public string Uuid { get; private set; }
     }
 }
