@@ -65,7 +65,7 @@
                     </Paragraph>
                 </FlowDocument>
             </ankiEditor:TokenizingControl>
-            <ListView x:Name="Fields" KeyboardNavigation.TabNavigation="Continue">
+            <ListView x:Name="Fields" KeyboardNavigation.TabNavigation="Continue" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel></StackPanel>

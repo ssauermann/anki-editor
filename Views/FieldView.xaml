@@ -10,7 +10,8 @@
     <DockPanel>
         <TextBlock x:Name="Name" DockPanel.Dock="Top"/>
         <TextBox x:Name="TxtBox"  Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 cal:Message.Attach="[Event GotFocus] = [Action ExecuteScript]" InputLanguageManager.InputLanguage="{Binding InputLanguage}"/>
+                 cal:Message.Attach="[Event GotFocus] = [Action ExecuteScript]" InputLanguageManager.InputLanguage="{Binding InputLanguage}"
+                 TextWrapping="Wrap" AcceptsReturn="True"/>
         <!--<RichTextBox x:Name="Rtb" cal:Message.Attach="[Event TextChanged] = [Action TextChanged($source)]" UndoLimit="50">
             <FlowDocument PageWidth="{Binding ActualWidth, ElementName=Rtb, Mode=OneWay}"></FlowDocument>
         </RichTextBox>-->
