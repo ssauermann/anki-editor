@@ -58,6 +58,8 @@ namespace AnkiEditor.ViewModels
         #region Backing Fields
 
         private FieldViewModel _selectedField;
+        private string _selectedTag;
+        private string _newTag = "";
 
         #endregion
 
@@ -84,6 +86,29 @@ namespace AnkiEditor.ViewModels
                 Deck.SelectedField = value?.Name;
             }
         }
+
+        public string SelectedTag
+        {
+            get => _selectedTag;
+            set
+            {
+                _selectedTag = value;
+                NotifyOfPropertyChange(() => SelectedTag);
+                NotifyOfPropertyChange(() => CanDeleteTag);
+            }
+        }
+
+        public string NewTag
+        {
+            get => _newTag;
+            set
+            {
+                _newTag = value;
+                NotifyOfPropertyChange(() => NewTag);
+                NotifyOfPropertyChange(() => CanAddTag);
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -124,6 +149,33 @@ namespace AnkiEditor.ViewModels
                 field.PropertyChanged += Field_PropertyChanged;
             }
         }
+
+
+        public Models.Note Save()
+        {
+            _note.tags.Clear();
+            _note.tags.AddRange(Tags);
+            _note.fields.Clear();
+            _note.fields.AddRange(from field in Fields select "" + field.Value);
+            return _note;
+        }
+
+        public bool CanAddTag => NewTag != "";
+
+        public void AddTag()
+        {
+            Tags.Add(NewTag);
+            NewTag = "";
+            Deck.DeckHasChanged = true;
+        }
+
+        public void DeleteTag()
+        {
+            Tags.Remove(SelectedTag);
+            Deck.DeckHasChanged = true;
+        }
+
+        public bool CanDeleteTag => SelectedTag != null;
 
         #endregion
 

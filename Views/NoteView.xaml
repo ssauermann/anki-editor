@@ -51,20 +51,25 @@
             </ToolBar>
         </ToolBarTray>
         <DockPanel  KeyboardNavigation.TabNavigation="Cycle">
-            <ListView DockPanel.Dock="Bottom" x:Name="Tags">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"></StackPanel>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-            </ListView>
-            <ankiEditor:TokenizingControl DockPanel.Dock="Bottom" x:Name="Tokenizer" TokenTemplate="{DynamicResource NameTokenTemplate}" VerticalScrollBarVisibility="Auto">
+            <DockPanel DockPanel.Dock="Bottom">
+                <Button x:Name="DeleteTag" DockPanel.Dock="Right" Width="25">-</Button>
+                <Button x:Name="AddTag" DockPanel.Dock="Right" Width="25">+</Button>
+                <TextBox x:Name="NewTag" Width="100" DockPanel.Dock="Right"></TextBox>
+                <ListView  MinHeight="25" x:Name="Tags" SelectedItem="{Binding SelectedTag}" >
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+            </DockPanel>
+            <!--<ankiEditor:TokenizingControl DockPanel.Dock="Bottom" x:Name="Tokenizer" TokenTemplate="{DynamicResource NameTokenTemplate}" VerticalScrollBarVisibility="Auto">
                 <FlowDocument>
                     <Paragraph>
                         <Run />
                     </Paragraph>
                 </FlowDocument>
-            </ankiEditor:TokenizingControl>
+            </ankiEditor:TokenizingControl>-->
             <ListView x:Name="Fields" KeyboardNavigation.TabNavigation="Continue" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>

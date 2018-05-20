@@ -72,14 +72,21 @@ namespace AnkiEditor.ViewModels
         public void CloseDeck()
         {
             CurrentDeck = null;
+            // TODO: This does not reset everything?
+            // Reopen another deck and stuff is broken
         }
 
         public bool CanSaveDeck => CurrentDeck != null && CurrentDeck.DeckHasChanged;
 
         public void SaveDeck()
         {
-            //TODO
-            throw new NotImplementedException();
+            var deck = CurrentDeck.Save();
+
+            var jsonString = JsonConvert.SerializeObject(deck, Formatting.Indented);
+
+            File.WriteAllText(_currentDeckFile, jsonString);
+
+
             CurrentDeck.DeckHasChanged = false;
         }
 

@@ -211,6 +211,13 @@ namespace AnkiEditor.ViewModels
             SelectedNoteViewModel = selection;
         }
 
+        public Models.Deck Save()
+        {
+            _deckModel.notes.Clear();
+            _deckModel.notes.AddRange(from nvm in NoteViewModels select nvm.Save());
+            return _deckModel;
+        }
+
         #endregion
 
     }

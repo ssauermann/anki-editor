@@ -24,7 +24,7 @@ namespace AnkiEditor.Views
         {
             InitializeComponent();
 
-            Tokenizer.TokenMatcher = text =>
+            /*Tokenizer.TokenMatcher = text =>
             {
                 if (text.EndsWith(" "))
                 {
@@ -32,7 +32,7 @@ namespace AnkiEditor.Views
                 }
 
                 return null;
-            };
+            };*/
         }
     }
 }
