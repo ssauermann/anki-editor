@@ -12,6 +12,7 @@ namespace AnkiEditor.Settings
         private FieldViewModel _scriptSrc;
         private bool _overwrite;
         private Script _script;
+        private bool _showPreview;
 
         public CultureInfo Language
         {
@@ -61,6 +62,16 @@ namespace AnkiEditor.Settings
             {
                 _overwrite = value;
                 NotifyOfPropertyChange(() => ScriptOverwrite);
+            }
+        }
+
+        public bool ShowPreview
+        {
+            get => _showPreview;
+            set
+            {
+                _showPreview = value;
+                NotifyOfPropertyChange(() => ShowPreview);
             }
         }
     }

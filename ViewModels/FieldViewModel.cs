@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
+using AnkiEditor.Settings;
 using Caliburn.Micro;
 
 namespace AnkiEditor.ViewModels
@@ -7,9 +9,7 @@ namespace AnkiEditor.ViewModels
     public class FieldViewModel : PropertyChangedBase
     {
         #region Fields
-
         private readonly NoteViewModel _note;
-
         #endregion
 
         #region Constructors
@@ -18,6 +18,12 @@ namespace AnkiEditor.ViewModels
         {
             _note = note;
             Name = name;
+
+            _note.Deck.DeckSettings.GetFieldSettings(_note.Uuid, Name).PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == "ShowPreview")
+                    NotifyOfPropertyChange(() => ShowPreview);
+            };
         }
 
         #endregion
@@ -51,6 +57,9 @@ namespace AnkiEditor.ViewModels
                 NotifyOfPropertyChange(() => InputLanguage);
             }
         }
+
+        public bool ShowPreview => _note.Deck.DeckSettings.GetFieldSettings(_note.Uuid, Name).ShowPreview;
+        
         #endregion
 
 
@@ -74,6 +83,11 @@ namespace AnkiEditor.ViewModels
 
             // Null as result == error => do not change current value
             if (result != null) Value = result;
+        }
+
+        public void GotFocus()
+        {
+            _note.SelectedField = this;
         }
 
         public void ExecuteScripts()

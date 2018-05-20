@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AnkiEditor.Views"
         xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
-        Title="Anki Editor" Height="450" Width="800">
+        Title="Anki Editor" Height="800" Width="1280">
     <Grid>
         <DockPanel LastChildFill="True" Grid.ColumnSpan="2">
             <ToolBarTray DockPanel.Dock="Top">
