@@ -76,6 +76,11 @@ namespace AnkiEditor.ViewModels
             if (result != null) Value = result;
         }
 
+        public void ExecuteScripts()
+        {
+            _note.ExecuteScripts(Name);
+        }
+
 
         #region Object Methods
 

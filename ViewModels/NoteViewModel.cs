@@ -177,6 +177,16 @@ namespace AnkiEditor.ViewModels
 
         public bool CanDeleteTag => SelectedTag != null;
 
+
+        public void ExecuteScripts(string triggerField)
+        {
+            var fields = Deck.DeckSettings.GetAllFieldsWithSetting(_noteModel.crowdanki_uuid, x => x.ScriptSrc?.Name == triggerField);
+            foreach (var field in fields)
+            {
+                Fields.First(x => x.Name == field).ExecuteScript();
+            }
+        }
+
         #endregion
 
         #region Event Handlers

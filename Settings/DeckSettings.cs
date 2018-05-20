@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using AnkiEditor.Scripts;
 using Caliburn.Micro;
 
@@ -36,6 +38,11 @@ namespace AnkiEditor.Settings
         public FieldSettings GetFieldSettings(string noteModelUuid, string fieldName)
         {
             return _fieldSettings.GetValueOrDefault($"{noteModelUuid}_{fieldName}");
+        }
+
+        public IEnumerable<string> GetAllFieldsWithSetting(string noteModelUuid, Func<FieldSettings, bool> condition)
+        {
+            return from kv in _fieldSettings where kv.Key.StartsWith(noteModelUuid + "_") && condition(kv.Value) select kv.Key.Substring(noteModelUuid.Length + 1);
         }
     }
 }
