@@ -45,8 +45,14 @@
                 </StatusBarItem>
                 <StatusBarItem>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock>#</TextBlock>
+                        <TextBlock Visibility="{Binding CurrentDeck, TargetNullValue=Hidden}">#</TextBlock>
                         <TextBlock x:Name="CurrentDeck_NoteCount" />
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Version: "></TextBlock>
+                        <TextBlock x:Name="Version"></TextBlock>
                     </StackPanel>
                 </StatusBarItem>
             </StatusBar>
