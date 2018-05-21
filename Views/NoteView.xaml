@@ -48,7 +48,7 @@
                 <Label>Script:</Label>
                 <ComboBox x:Name="Deck_Scripts" SelectedItem="{Binding Deck.SettingsForField.Script}" DisplayMemberPath="DisplayName"/>
                 <Label>Script Source:</Label>
-                <ComboBox x:Name="Deck_SelectedNoteViewModel_Fields" SelectedItem="{Binding Deck.SettingsForField.ScriptSrc}" DisplayMemberPath="Name"/>
+                <ComboBox x:Name="Deck_SelectedNoteViewModel_FieldsStrings" SelectedItem="{Binding Deck.SettingsForField.ScriptSrc}" />
                 <Grid>
                     <CheckBox x:Name="Deck_SettingsForField_ScriptOverwrite" Content="Overwrite Content"/>
                 </Grid>

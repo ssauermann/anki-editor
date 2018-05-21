@@ -11,7 +11,25 @@ namespace AnkiEditor.Settings
     {
         private readonly CultureInfo _defaultLanguage;
         private readonly Script _defaultScript;
-        private readonly Dictionary<string, FieldSettings> _fieldSettings = new Dictionary<string, FieldSettings>();
+        public readonly Dictionary<string, FieldSettings> FieldSettings = new Dictionary<string, FieldSettings>();
+
+        public HashSet<string> LeechedNotes { get; } = new HashSet<string>();
+
+        public DeckSettingsModel Model()
+        {
+            var model = new DeckSettingsModel()
+            {
+                LeechedNotes = LeechedNotes,
+                FieldSettings = new Dictionary<string, FieldSettingsModel>(),
+            };
+
+            foreach (var kv in FieldSettings)
+            {
+                model.FieldSettings.Add(kv.Key, kv.Value.Model);
+            }
+
+            return model;
+        }
 
         public DeckSettings(CultureInfo defaultLanguage, Script defaultScript)
         {
@@ -25,7 +43,7 @@ namespace AnkiEditor.Settings
 
             foreach (var fld in noteModel.flds)
             {
-                _fieldSettings.Add($"{prefix}_{fld.name}", new FieldSettings()
+                FieldSettings.Add($"{prefix}_{fld.name}", new FieldSettings()
                 {
                     Language = _defaultLanguage,
                     Keep = false,
@@ -37,12 +55,18 @@ namespace AnkiEditor.Settings
 
         public FieldSettings GetFieldSettings(string noteModelUuid, string fieldName)
         {
-            return _fieldSettings.GetValueOrDefault($"{noteModelUuid}_{fieldName}");
+            return FieldSettings.GetValueOrDefault($"{noteModelUuid}_{fieldName}");
         }
 
         public IEnumerable<string> GetAllFieldsWithSetting(string noteModelUuid, Func<FieldSettings, bool> condition)
         {
-            return from kv in _fieldSettings where kv.Key.StartsWith(noteModelUuid + "_") && condition(kv.Value) select kv.Key.Substring(noteModelUuid.Length + 1);
+            return from kv in FieldSettings where kv.Key.StartsWith(noteModelUuid + "_") && condition(kv.Value) select kv.Key.Substring(noteModelUuid.Length + 1);
         }
+    }
+
+    public struct DeckSettingsModel
+    {
+        public HashSet<string> LeechedNotes;
+        public Dictionary<string, FieldSettingsModel> FieldSettings;
     }
 }

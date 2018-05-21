@@ -30,6 +30,14 @@
                         <AccessText>_Delete Note</AccessText>
                     </Button>
                 </ToolBar>
+                <ToolBar Visibility="{Binding CurrentDeck, TargetNullValue=Hidden}">
+                    <Button cal:Message.Attach="Unleech" cal:Action.Target="{Binding CurrentDeck}" ToolTip="Remove all leech tags and store them." >
+                        <AccessText>_Unleech</AccessText>
+                    </Button>
+                    <Button cal:Message.Attach="Releech" cal:Action.Target="{Binding CurrentDeck}" ToolTip="Re-add stored leech tags.">
+                        <AccessText>_Releech</AccessText>
+                    </Button>
+                </ToolBar>
             </ToolBarTray>
             <StatusBar DockPanel.Dock="Bottom">
                 <StatusBarItem>

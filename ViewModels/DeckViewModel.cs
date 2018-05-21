@@ -90,13 +90,12 @@ namespace AnkiEditor.ViewModels
         private Models.NoteModel _selectedNoteModel;
         private bool _scrollToSelected;
         private bool _deckHasChanged;
-        private ICollectionView _sortedNoteViewModel;
 
         #endregion
 
         #region Properties
 
-        public DeckSettings DeckSettings { get; }
+        public DeckSettings DeckSettings { get; set; }
 
         public string Name => _deckModel.name;
         public string Desc => _deckModel.desc;
@@ -117,6 +116,8 @@ namespace AnkiEditor.ViewModels
             {
                 _deckHasChanged = value;
                 NotifyOfPropertyChange(() => DeckHasChanged);
+                NotifyOfPropertyChange(() => CanReleech);
+                NotifyOfPropertyChange(() => CanUnleech);
             }
         }
         public SmartCollection<NoteViewModel> NoteViewModels { get; } = new SmartCollection<NoteViewModel>();
@@ -173,6 +174,33 @@ namespace AnkiEditor.ViewModels
             NoteViewModels.Remove(SelectedNoteViewModel);
             DeckHasChanged = true;
             NotifyOfPropertyChange(() => NoteCount);
+        }
+
+        public bool CanUnleech => NoteViewModels.Count(x => x.Tags.Contains("leech")) > 0 ;
+
+        public void Unleech()
+        {
+            foreach (var noteViewModel in NoteViewModels)
+            {
+                if (noteViewModel.Tags.Remove("leech"))
+                {
+                    DeckSettings.LeechedNotes.Add(noteViewModel.Guid);
+                    DeckHasChanged = true;
+                }
+            }
+        }
+
+        public bool CanReleech => DeckSettings.LeechedNotes.Count > 0;
+
+        public void Releech()
+        {
+            foreach (var note in DeckSettings.LeechedNotes)
+            {
+                var nm = NoteViewModels.First(n => n.Guid == note);
+                nm.AddTag("leech");
+            }
+
+            DeckSettings.LeechedNotes.Clear();
         }
 
         #endregion

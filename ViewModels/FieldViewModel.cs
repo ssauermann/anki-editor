@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using AnkiEditor.Settings;
@@ -79,7 +80,7 @@ namespace AnkiEditor.ViewModels
             if (!settings.ScriptOverwrite && !string.IsNullOrWhiteSpace(Value)) return;
 
             // Execute script asynchronously
-            var result = await settings.Script.Execute(settings.ScriptSrc.Value);
+            var result = await settings.Script.Execute(_note.Fields.First(x => x.Name == settings.ScriptSrc).Value);
 
             // Null as result == error => do not change current value
             if (result != null) Value = result;

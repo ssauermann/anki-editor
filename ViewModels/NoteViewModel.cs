@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Caliburn.Micro;
@@ -68,6 +69,8 @@ namespace AnkiEditor.ViewModels
 
         public string Uuid { get; private set; }
 
+        public string Guid { get; private set; }
+
         public string SortName => SortField.Value;
 
         public FieldViewModel SortField => Fields[_noteModel.sortf];
@@ -75,6 +78,8 @@ namespace AnkiEditor.ViewModels
         public ObservableCollection<string> Tags { get; } = new ObservableCollection<string>();
 
         public ObservableCollection<FieldViewModel> Fields { get; } = new ObservableCollection<FieldViewModel>();
+
+        public ObservableCollection<string> FieldsStrings { get; } = new ObservableCollection<string>();
 
         public FieldViewModel SelectedField
         {
@@ -108,7 +113,7 @@ namespace AnkiEditor.ViewModels
                 NotifyOfPropertyChange(() => CanAddTag);
             }
         }
-
+        
         #endregion
 
         #region Methods
@@ -116,6 +121,7 @@ namespace AnkiEditor.ViewModels
         private void Initialize()
         {
             Uuid = _noteModel.crowdanki_uuid;
+            Guid = _note.guid;
 
             // Extract tags
             _note.tags.ForEach(Tags.Add);
@@ -135,12 +141,13 @@ namespace AnkiEditor.ViewModels
                     };
 
                     settings.PropertyChanged += (sender, args) => fvm.InputLanguage = settings.Language;
-                    settings.ScriptSrc = fvm;
+                    settings.ScriptSrc = fvm.Name;
 
                     return fvm;
                 }))
             {
                 Fields.Add(fieldViewModel);
+                FieldsStrings.Add(fieldViewModel.Name);
             }
 
             // Register property changed event for all fields
@@ -164,9 +171,17 @@ namespace AnkiEditor.ViewModels
 
         public void AddTag()
         {
-            Tags.Add(NewTag);
+            AddTag(NewTag);
             NewTag = "";
-            Deck.DeckHasChanged = true;
+        }
+
+        public void AddTag(string newTag)
+        {
+            if (!Tags.Contains(newTag))
+            {
+                Tags.Add(newTag);
+                Deck.DeckHasChanged = true;
+            }
         }
 
         public void DeleteTag()
@@ -180,7 +195,7 @@ namespace AnkiEditor.ViewModels
 
         public void ExecuteScripts(string triggerField)
         {
-            var fields = Deck.DeckSettings.GetAllFieldsWithSetting(_noteModel.crowdanki_uuid, x => x.ScriptSrc?.Name == triggerField);
+            var fields = Deck.DeckSettings.GetAllFieldsWithSetting(_noteModel.crowdanki_uuid, x => x.ScriptSrc == triggerField);
             foreach (var field in fields)
             {
                 Fields.First(x => x.Name == field).ExecuteScript();

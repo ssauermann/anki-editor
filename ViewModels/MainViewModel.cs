@@ -1,5 +1,10 @@
-﻿using System;
+﻿using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters;
+using System.Windows;
+using AnkiEditor.Models;
+using AnkiEditor.Settings;
 using Caliburn.Micro;
 using Microsoft.Win32;
 using Newtonsoft.Json;
@@ -54,7 +59,7 @@ namespace AnkiEditor.ViewModels
                 _currentDeckFile = fileDialog.FileName;
 
                 var jsonString = File.ReadAllText(_currentDeckFile);
-                var deck = JsonConvert.DeserializeObject<Models.Deck>(jsonString);
+                var deck = JsonConvert.DeserializeObject<Deck>(jsonString);
                 CurrentDeck = new DeckViewModel(deck);
 
                 CurrentDeck.PropertyChanged += (sender, args) =>
@@ -64,6 +69,32 @@ namespace AnkiEditor.ViewModels
                         NotifyOfPropertyChange(() => CanSaveDeck);
                     }
                 };
+
+                if (File.Exists(_currentDeckFile + ".settings"))
+                {
+                    var settingsString = File.ReadAllText(_currentDeckFile + ".settings");
+                    var set = JsonConvert.DeserializeObject<DeckSettingsModel>(settingsString, new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All,
+                    });
+                    foreach (var note in set.LeechedNotes)
+                    {
+                        CurrentDeck.DeckSettings.LeechedNotes.Add(note);
+                    }
+
+                    foreach (var kv in set.FieldSettings)
+                    {
+                        var f = kv.Value;
+                        var fs = CurrentDeck.DeckSettings.FieldSettings[kv.Key];
+
+                        fs.Keep = f.Keep;
+                        fs.Language = new CultureInfo(f.Language);
+                        fs.Script = CurrentDeck.Scripts.First(x => x.DisplayName == f.Script);
+                        fs.ShowPreview = f.ShowPreview;
+                        fs.ScriptOverwrite = f.ScriptOverwrite;
+                        fs.ScriptSrc = f.ScriptSrc;
+                    }
+                }
             }
         }
 
@@ -84,12 +115,16 @@ namespace AnkiEditor.ViewModels
 
             var jsonString = JsonConvert.SerializeObject(deck, Formatting.Indented);
 
-            File.WriteAllText(_currentDeckFile, jsonString);
+            var settings = JsonConvert.SerializeObject(CurrentDeck.DeckSettings.Model(), Formatting.Indented, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+            });
 
+            File.WriteAllText(_currentDeckFile, jsonString);
+            File.WriteAllText(_currentDeckFile + ".settings", settings);
 
             CurrentDeck.DeckHasChanged = false;
         }
-
         #endregion
 
     }

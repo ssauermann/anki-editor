@@ -9,7 +9,7 @@ namespace AnkiEditor.Settings
     {
         private CultureInfo _language;
         private bool? _keep;
-        private FieldViewModel _scriptSrc;
+        private string _scriptSrc;
         private bool _overwrite;
         private Script _script;
         private bool _showPreview;
@@ -45,7 +45,7 @@ namespace AnkiEditor.Settings
             }
         }
 
-        public FieldViewModel ScriptSrc
+        public string ScriptSrc
         {
             get => _scriptSrc;
             set
@@ -74,5 +74,26 @@ namespace AnkiEditor.Settings
                 NotifyOfPropertyChange(() => ShowPreview);
             }
         }
+
+        public FieldSettingsModel Model => new FieldSettingsModel()
+        {
+            Language = Language.Name,
+            ScriptSrc = ScriptSrc,
+            Script = Script.DisplayName,
+            Keep = Keep,
+            ScriptOverwrite = ScriptOverwrite,
+            ShowPreview = ShowPreview,
+        };
+
+    }
+
+    public struct FieldSettingsModel
+    {
+        public string Language;
+        public string ScriptSrc;
+        public string Script;
+        public bool? Keep;
+        public bool ScriptOverwrite;
+        public bool ShowPreview;
     }
 }
