@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using AnkiEditor.Query;
+﻿using System.Windows;
 using AnkiEditor.ViewModels;
 using Caliburn.Micro;
 

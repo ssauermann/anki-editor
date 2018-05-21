@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using AnkiEditor.Models;
-using AnkiEditor.ViewModels;
+﻿using System.Threading.Tasks;
 
 namespace AnkiEditor.Scripts
 {

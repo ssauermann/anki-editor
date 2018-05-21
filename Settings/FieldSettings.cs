@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using AnkiEditor.Scripts;
-using AnkiEditor.ViewModels;
 using Caliburn.Micro;
 
 namespace AnkiEditor.Settings
