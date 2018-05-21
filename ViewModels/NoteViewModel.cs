@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using AnkiEditor.Settings;
 using Caliburn.Micro;
 
 namespace AnkiEditor.ViewModels
@@ -140,8 +141,12 @@ namespace AnkiEditor.ViewModels
                         InputLanguage = defaultLang,
                     };
 
-                    settings.PropertyChanged += (sender, args) => fvm.InputLanguage = settings.Language;
                     settings.ScriptSrc = fvm.Name;
+                    settings.PropertyChanged += (sender, args) =>
+                    {
+                        if(args.PropertyName == nameof(FieldSettings.Language))
+                            fvm.InputLanguage = settings.Language;
+                    };
 
                     return fvm;
                 }))
