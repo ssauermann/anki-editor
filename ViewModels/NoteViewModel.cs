@@ -88,7 +88,7 @@ namespace AnkiEditor.ViewModels
             {
                 _selectedField = value;
                 NotifyOfPropertyChange(() => SelectedField);
-                Deck.SelectedField = value?.Name;
+                Deck.SelectedField = value?.FieldName;
             }
         }
 
@@ -140,7 +140,7 @@ namespace AnkiEditor.ViewModels
                         InputLanguage = defaultLang,
                     };
 
-                    settings.ScriptSrc = fvm.Name;
+                    settings.ScriptSrc = fvm.FieldName;
                     settings.PropertyChanged += (sender, args) =>
                     {
                         if(args.PropertyName == nameof(FieldSettings.Language))
@@ -151,7 +151,7 @@ namespace AnkiEditor.ViewModels
                 }))
             {
                 Fields.Add(fieldViewModel);
-                FieldsStrings.Add(fieldViewModel.Name);
+                FieldsStrings.Add(fieldViewModel.FieldName);
             }
 
             // Register property changed event for all fields
@@ -202,7 +202,7 @@ namespace AnkiEditor.ViewModels
             var fields = Deck.DeckSettings.GetAllFieldsWithSetting(_noteModel.crowdanki_uuid, x => x.ScriptSrc == triggerField);
             foreach (var field in fields)
             {
-                Fields.First(x => x.Name == field).ExecuteScript();
+                Fields.First(x => x.FieldName == field).ExecuteScript();
             }
         }
 

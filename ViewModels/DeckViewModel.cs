@@ -129,7 +129,7 @@ namespace AnkiEditor.ViewModels
                     return;
 
                 _selectedNoteViewModel = value;
-                SelectedField = _selectedNoteViewModel?.SelectedField?.Name;
+                SelectedField = _selectedNoteViewModel?.SelectedField?.FieldName;
                 NotifyOfPropertyChange(() => SelectedNoteViewModel);
                 NotifyOfPropertyChange(() => CanDeleteNote);
                 NotifyOfPropertyChange(() => SettingsForField);
