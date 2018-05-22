@@ -17,7 +17,7 @@ namespace AnkiEditor.ViewModels
         private readonly Models.Deck _deckModel;
 
         private readonly Dictionary<string, Models.NoteModel> _noteModels = new Dictionary<string, Models.NoteModel>();
-        private readonly IQuery _query = new Nihongodera();
+        public IQuery MyQuery { get; } = new Nihongodera();
 
         #endregion
 
@@ -41,9 +41,9 @@ namespace AnkiEditor.ViewModels
             var defaultScript = new NoneScript("None");
             Scripts.Add(defaultScript);
             Scripts.Add(new MirrorScript("Clone"));
-            Scripts.Add(new FuriganaScript(_query, "Furigana"));
-            Scripts.Add(new DictionaryFormScript(_query, "Dictionary Form"));
-            Scripts.Add(new NotesScript(_query, "Notes"));
+            Scripts.Add(new FuriganaScript(MyQuery, "Furigana"));
+            Scripts.Add(new DictionaryFormScript(MyQuery, "Dictionary Form"));
+            Scripts.Add(new NotesScript(MyQuery, "Notes"));
 
 
             // Initialize deck settings
