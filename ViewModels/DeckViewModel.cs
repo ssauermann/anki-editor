@@ -178,9 +178,14 @@ namespace AnkiEditor.ViewModels
                         settings.Keep = false;
                     }
                 }
-
             }
-            
+
+            // Keep tags
+            foreach (var tag in SelectedNoteViewModel.Tags)
+            {
+                newNote.Tags.Add(tag);
+            }
+
             NoteViewModels.Add(newNote);
             Sort();
             ScrollToSelected = true;
