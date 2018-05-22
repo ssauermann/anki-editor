@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using AnkiEditor.Settings;
 using Caliburn.Micro;
 
@@ -61,6 +63,7 @@ namespace AnkiEditor.ViewModels
         private FieldViewModel _selectedField;
         private string _selectedTag;
         private string _newTag = "";
+        private bool _isTextSelected;
 
         #endregion
 
@@ -113,7 +116,20 @@ namespace AnkiEditor.ViewModels
                 NotifyOfPropertyChange(() => CanAddTag);
             }
         }
-        
+
+        public bool IsTextSelected
+        {
+            get => _isTextSelected;
+            set
+            {
+                _isTextSelected = value;
+                NotifyOfPropertyChange(() => IsTextSelected);
+                NotifyOfPropertyChange(() => CanSelectionAddBraces);
+                NotifyOfPropertyChange(() => CanSelectionAddColor);
+                NotifyOfPropertyChange(() => CanSelectionAddFurigana);
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -158,6 +174,34 @@ namespace AnkiEditor.ViewModels
             foreach (var field in Fields)
             {
                 field.PropertyChanged += Field_PropertyChanged;
+            }
+        }
+
+        public bool CanSelectionAddFurigana => IsTextSelected;
+        public void SelectionAddFurigana()
+        {
+            SelectionModify(x => Deck.MyQuery.FuriganaForm(x).ContinueWith(f => " " + f.Result));
+        }
+
+        public bool CanSelectionAddColor => IsTextSelected;
+        public void SelectionAddColor()
+        {
+            SelectionModify(x => Task.FromResult("<font color=\"#0000ff\">" + x + "</font>"));
+        }
+
+
+        public bool CanSelectionAddBraces => IsTextSelected;
+        public void SelectionAddBraces()
+        {
+            SelectionModify(x => Task.FromResult("{" + x + "}"));
+        }
+
+        private async void SelectionModify(Func<string, Task<string>> method)
+        {
+            var newText = await method(SelectedField.SelectedText);
+            if (!string.IsNullOrEmpty(newText))
+            {
+                SelectedField.Value = SelectedField.Value.Replace(SelectedField.SelectedText, newText);
             }
         }
 
@@ -225,6 +269,10 @@ namespace AnkiEditor.ViewModels
                     //TODO Enable scrolling when DeckView code behind is updated on ScrollToSelected change instead of selection changed
                     //Deck.ScrollToSelected = true; 
                 }
+            }
+            else if(e.PropertyName == nameof(FieldViewModel.SelectedText))
+            {
+                IsTextSelected = !string.IsNullOrEmpty(changed?.SelectedText);
             }
 
         }

@@ -23,7 +23,8 @@
                 </xctk:RichTextBox.TextFormatter>
             </xctk:RichTextBox>
             <TextBox x:Name="TxtBox"  Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     cal:Message.Attach="[Event LostFocus] = [Action ExecuteScripts]; [Event GotFocus] = [Action GotFocus]" InputLanguageManager.InputLanguage="{Binding InputLanguage}"
+                     cal:Message.Attach="[Event LostFocus] = [Action ExecuteScripts]; [Event GotFocus] = [Action GotFocus]; [Event SelectionChanged] = [Action SelectionChanged($source)]"
+                     InputLanguageManager.InputLanguage="{Binding InputLanguage}"
                      TextWrapping="Wrap" AcceptsReturn="True" FontSize="15" Margin="0,0,0,5" BorderThickness="0" Background="Transparent"/>
 
 

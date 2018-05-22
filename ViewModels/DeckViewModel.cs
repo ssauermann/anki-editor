@@ -17,7 +17,7 @@ namespace AnkiEditor.ViewModels
         private readonly Models.Deck _deckModel;
 
         private readonly Dictionary<string, Models.NoteModel> _noteModels = new Dictionary<string, Models.NoteModel>();
-        private readonly IQuery _query = new Nihongodera();
+        public IQuery MyQuery { get; } = new Nihongodera();
 
         #endregion
 
@@ -41,9 +41,9 @@ namespace AnkiEditor.ViewModels
             var defaultScript = new NoneScript("None");
             Scripts.Add(defaultScript);
             Scripts.Add(new MirrorScript("Clone"));
-            Scripts.Add(new FuriganaScript(_query, "Furigana"));
-            Scripts.Add(new DictionaryFormScript(_query, "Dictionary Form"));
-            Scripts.Add(new NotesScript(_query, "Notes"));
+            Scripts.Add(new FuriganaScript(MyQuery, "Furigana"));
+            Scripts.Add(new DictionaryFormScript(MyQuery, "Dictionary Form"));
+            Scripts.Add(new NotesScript(MyQuery, "Notes"));
 
 
             // Initialize deck settings
@@ -157,7 +157,37 @@ namespace AnkiEditor.ViewModels
         public void AddNote()
         {
             var newNote = new NoteViewModel(SelectedNoteModel, this);
+
+            if (SelectedNoteModel.crowdanki_uuid == SelectedNoteViewModel.Uuid)
+            {
+                // Copy values that should be kept
+                var fieldZip = SelectedNoteViewModel.Fields.Zip(newNote.Fields,
+                    (current, new_) => new {Current = current, New = new_});
+
+                foreach(var field in fieldZip)
+                {
+                    var settings = DeckSettings.GetFieldSettings(SelectedNoteModel.crowdanki_uuid, field.Current.FieldName);
+                    if (settings.Keep == true || settings.Keep == null)
+                    {
+                        field.New.Value = field.Current.Value;
+                    }
+
+                    // Keep once reset
+                    if (settings.Keep == null)
+                    {
+                        settings.Keep = false;
+                    }
+                }
+            }
+
+            // Keep tags
+            foreach (var tag in SelectedNoteViewModel.Tags)
+            {
+                newNote.Tags.Add(tag);
+            }
+
             NoteViewModels.Add(newNote);
+            Sort();
             ScrollToSelected = true;
             SelectedNoteViewModel = newNote;
             DeckHasChanged = true;

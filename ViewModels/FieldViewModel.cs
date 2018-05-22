@@ -31,6 +31,7 @@ namespace AnkiEditor.ViewModels
 
         private string _value;
         private CultureInfo _inputLanguage;
+        private string _selectedText;
 
         #endregion
 
@@ -58,13 +59,26 @@ namespace AnkiEditor.ViewModels
         }
 
         public bool ShowPreview => _note.Deck.DeckSettings.GetFieldSettings(_note.Uuid, FieldName).ShowPreview;
-        
+
+        public string SelectedText
+        {
+            get => _selectedText;
+            set
+            {
+                if (_selectedText != value)
+                {
+                    _selectedText = value;
+                    NotifyOfPropertyChange(() => SelectedText);
+                }
+            }
+        }
+
         #endregion
 
 
-        public void TextChanged(RichTextBox sender)
+        public void SelectionChanged(TextBox sender)
         {
-
+            SelectedText = sender.SelectedText;
         }
 
         public async void ExecuteScript()
