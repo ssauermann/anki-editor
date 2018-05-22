@@ -157,7 +157,32 @@ namespace AnkiEditor.ViewModels
         public void AddNote()
         {
             var newNote = new NoteViewModel(SelectedNoteModel, this);
+
+            if (SelectedNoteModel.crowdanki_uuid == SelectedNoteViewModel.Uuid)
+            {
+                // Copy values that should be kept
+                var fieldZip = SelectedNoteViewModel.Fields.Zip(newNote.Fields,
+                    (current, new_) => new {Current = current, New = new_});
+
+                foreach(var field in fieldZip)
+                {
+                    var settings = DeckSettings.GetFieldSettings(SelectedNoteModel.crowdanki_uuid, field.Current.FieldName);
+                    if (settings.Keep == true || settings.Keep == null)
+                    {
+                        field.New.Value = field.Current.Value;
+                    }
+
+                    // Keep once reset
+                    if (settings.Keep == null)
+                    {
+                        settings.Keep = false;
+                    }
+                }
+
+            }
+            
             NoteViewModels.Add(newNote);
+            Sort();
             ScrollToSelected = true;
             SelectedNoteViewModel = newNote;
             DeckHasChanged = true;
