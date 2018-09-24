@@ -125,6 +125,7 @@ namespace AnkiEditor.ViewModels
                 _isTextSelected = value;
                 NotifyOfPropertyChange(() => IsTextSelected);
                 NotifyOfPropertyChange(() => CanSelectionAddBraces);
+                NotifyOfPropertyChange(() => CanSelectionAddBrackets);
                 NotifyOfPropertyChange(() => CanSelectionAddColor);
                 NotifyOfPropertyChange(() => CanSelectionAddFurigana);
             }
@@ -194,6 +195,12 @@ namespace AnkiEditor.ViewModels
         public void SelectionAddBraces()
         {
             SelectionModify(x => Task.FromResult("{" + x + "}"));
+        }
+
+        public bool CanSelectionAddBrackets => IsTextSelected;
+        public void SelectionAddBrackets()
+        {
+            SelectionModify(x => Task.FromResult("[" + x + "]"));
         }
 
         private async void SelectionModify(Func<string, Task<string>> method)
