@@ -157,7 +157,11 @@ namespace AnkiEditor.ViewModels
                         InputLanguage = defaultLang,
                     };
 
-                    settings.ScriptSrc = fvm.FieldName;
+                    if (string.IsNullOrWhiteSpace(settings.ScriptSrc))
+                    {
+                        settings.ScriptSrc = fvm.FieldName;
+                    }
+
                     settings.PropertyChanged += (sender, args) =>
                     {
                         if(args.PropertyName == nameof(FieldSettings.Language))
