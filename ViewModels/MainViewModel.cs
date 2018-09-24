@@ -38,7 +38,7 @@ namespace AnkiEditor.ViewModels
             }
         }
 
-        public string Version => "beta 0.2";
+        public string Version => "beta 0.3";
 
 
         #endregion

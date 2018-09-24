@@ -56,7 +56,8 @@
             <ToolBar>
                 <Button x:Name="SelectionAddFurigana">Add Furigana</Button>
                 <Button x:Name="SelectionAddColor">Add color</Button>
-                <Button x:Name="SelectionAddBraces">Enclose with braces</Button>
+                <Button x:Name="SelectionAddBraces">Enclose with braces { }</Button>
+                <Button x:Name="SelectionAddBrackets">Enclose with brackets [ ]</Button>
             </ToolBar>
         </ToolBarTray>
         <DockPanel  KeyboardNavigation.TabNavigation="Cycle">
