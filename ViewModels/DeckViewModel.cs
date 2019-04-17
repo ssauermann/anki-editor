@@ -17,7 +17,8 @@ namespace AnkiEditor.ViewModels
         private readonly Models.Deck _deckModel;
 
         private readonly Dictionary<string, Models.NoteModel> _noteModels = new Dictionary<string, Models.NoteModel>();
-        public IQuery MyQuery { get; } = new Nihongodera();
+        public Nihongodera QueryNihongodera { get; } = new Nihongodera();
+        public Wadoku QueryWadoku { get; }
 
         #endregion
 
@@ -26,6 +27,8 @@ namespace AnkiEditor.ViewModels
         public DeckViewModel(Models.Deck deckModel)
         {
             _deckModel = deckModel;
+
+            QueryWadoku = new Wadoku(QueryNihongodera);
 
             // Load available input languages
             foreach (var lang in InputLanguageManager.Current.AvailableInputLanguages ?? new List<object>())
@@ -41,9 +44,10 @@ namespace AnkiEditor.ViewModels
             var defaultScript = new NoneScript("None");
             Scripts.Add(defaultScript);
             Scripts.Add(new MirrorScript("Clone"));
-            Scripts.Add(new FuriganaScript(MyQuery, "Furigana"));
-            Scripts.Add(new DictionaryFormScript(MyQuery, "Dictionary Form"));
-            Scripts.Add(new NotesScript(MyQuery, "Notes"));
+            Scripts.Add(new TranslationScript(QueryWadoku, "Translate"));
+            Scripts.Add(new FuriganaScript(QueryNihongodera, "Furigana"));
+            Scripts.Add(new DictionaryFormScript(QueryNihongodera, "Dictionary Form"));
+            Scripts.Add(new NotesScript(QueryNihongodera, "Notes"));
 
 
             // Initialize deck settings

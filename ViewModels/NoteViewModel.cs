@@ -185,7 +185,7 @@ namespace AnkiEditor.ViewModels
         public bool CanSelectionAddFurigana => IsTextSelected;
         public void SelectionAddFurigana()
         {
-            SelectionModify(x => Deck.MyQuery.FuriganaForm(x).ContinueWith(f => " " + f.Result));
+            SelectionModify(x => Deck.QueryNihongodera.FuriganaForm(x).ContinueWith(f => " " + f.Result));
         }
 
         public bool CanSelectionAddColor => IsTextSelected;

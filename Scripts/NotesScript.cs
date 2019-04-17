@@ -5,9 +5,9 @@ namespace AnkiEditor.Scripts
 {
     class NotesScript : Script
     {
-        private readonly IQuery _query;
+        private readonly Nihongodera _query;
 
-        public NotesScript(IQuery query, string displayName) : base(displayName)
+        public NotesScript(Nihongodera query, string displayName) : base(displayName)
         {
             _query = query;
         }

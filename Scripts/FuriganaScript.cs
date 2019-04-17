@@ -5,9 +5,9 @@ namespace AnkiEditor.Scripts
 {
     class FuriganaScript : Script
     {
-        private readonly IQuery _query;
+        private readonly Nihongodera _query;
 
-        public FuriganaScript(IQuery query, string displayName) : base(displayName)
+        public FuriganaScript(Nihongodera query, string displayName) : base(displayName)
         {
             _query = query;
         }

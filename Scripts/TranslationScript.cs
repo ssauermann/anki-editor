@@ -3,11 +3,11 @@ using AnkiEditor.Query;
 
 namespace AnkiEditor.Scripts
 {
-    class DictionaryFormScript : Script
+    class TranslationScript : Script
     {
-        private readonly Nihongodera _query;
+        private readonly Wadoku _query;
 
-        public DictionaryFormScript(Nihongodera query, string displayName) : base(displayName)
+        public TranslationScript(Wadoku query, string displayName) : base(displayName)
         {
             _query = query;
         }
@@ -15,7 +15,7 @@ namespace AnkiEditor.Scripts
         public override async Task<string> Execute(string src)
         {
             if (string.IsNullOrWhiteSpace(src)) return null;
-            var dic = await _query.DictionaryForm(src);
+            var dic = await _query.Translate(src);
             return dic == src ? null : dic;
         }
     }
